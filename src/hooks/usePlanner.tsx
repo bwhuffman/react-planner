@@ -1,22 +1,7 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, ReactNode } from "react";
+import { useTasks } from "./useTasks";
 
-interface Task {
-  id: string;
-  title: string;
-  startDate: Date;
-  endDate: Date;
-  progress: number;
-  dependencies?: string[];
-}
-
-interface PlannerContextType {
-  tasks: Task[];
-  setTasks: (tasks: Task[]) => void;
-  zoom: number;
-  setZoom: (zoom: number) => void;
-  scale: "day" | "week" | "month";
-  setScale: (scale: "day" | "week" | "month") => void;
-}
+interface PlannerContextType {}
 
 const PlannerContext = createContext<PlannerContextType | undefined>(undefined);
 
@@ -25,17 +10,10 @@ interface PlannerProviderProps {
 }
 
 export function PlannerProvider({ children }: PlannerProviderProps) {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [zoom, setZoom] = useState(1);
-  const [scale, setScale] = useState<"day" | "week" | "month">("day");
+  const tasks = useTasks();
 
   const value = {
-    tasks,
-    setTasks,
-    zoom,
-    setZoom,
-    scale,
-    setScale,
+    ...tasks,
   };
 
   return (
