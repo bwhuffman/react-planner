@@ -1,4 +1,3 @@
-// import { usePlanner } from "../hooks/usePlanner";
 import { Task as TaskType } from "../types";
 
 export function Task({
@@ -10,7 +9,6 @@ export function Task({
   hidden,
   selected,
 }: TaskType) {
-  //   const { deleteTasks } = usePlanner();
   return (
     <div
       key={id}

@@ -2,35 +2,20 @@ import { useEffect, useRef } from "react";
 import { select } from "d3-selection";
 import { axisTop } from "d3-axis";
 import { ScaleTime } from "d3-scale";
+import { usePlannerStore } from "../store/store";
 
 type TimeAxisProps = {
-  tickCount?: number;
   scale: ScaleTime<number, number>;
-  width: number;
-  height: number;
 };
 
-export const TimeAxis = ({
-  scale,
-  width,
-  height,
-  tickCount,
-}: TimeAxisProps) => {
+export const TimeAxis = ({ scale }: TimeAxisProps) => {
   const axisRef = useRef(null);
-
-  // set default values
-  // TODO: let users configure ticks
-  const TICK_SIZE = 6;
-  const SUBTICK_SIZE = 4;
-  const TICK_COUNT = tickCount || width / 100;
-  const SUBTICK_COUNT = 4;
-
-  // update width on resize
-  // useEffect(() => {
-  //   const updateWidth = () => setWidth(window.innerWidth);
-  //   window.addEventListener("resize", updateWidth);
-  //   return () => window.removeEventListener("resize", updateWidth);
-  // }, []);
+  const width = usePlannerStore((state) => state.width);
+  const axisHeight = usePlannerStore((state) => state.axisHeight);
+  const axisTickCount = usePlannerStore((state) => state.axisTickCount);
+  const axisSubTickCount = usePlannerStore((state) => state.axisSubTickCount);
+  const axisTickSize = usePlannerStore((state) => state.axisTickSize);
+  const axisSubTickSize = usePlannerStore((state) => state.axisSubTickSize);
 
   // update axis on width change
   useEffect(() => {
@@ -40,39 +25,39 @@ export const TimeAxis = ({
     svg.selectAll("*").remove();
 
     const axis = axisTop(scale)
-      .ticks(TICK_COUNT)
-      .tickSize(TICK_SIZE)
+      .ticks(axisTickCount)
+      .tickSize(axisTickSize)
       .tickSizeOuter(0);
 
-    const g = svg.append("g").attr("transform", `translate(0, ${height})`);
+    const g = svg.append("g").attr("transform", `translate(0, ${axisHeight})`);
 
     g.call(axis);
 
     // Add sub-ticks
-    const tickValues = scale.ticks(TICK_COUNT);
+    const tickValues = scale.ticks(axisTickCount);
     tickValues.forEach((tickValue, index) => {
       const x = scale(tickValue);
 
       // Calculate the interval between major ticks
       const nextTickValue = tickValues[index + 1];
       if (nextTickValue) {
-        const interval = (scale(nextTickValue) - x) / (SUBTICK_COUNT + 1);
+        const interval = (scale(nextTickValue) - x) / (axisSubTickCount + 1);
 
         // Add sub-ticks between each major tick
-        for (let i = 1; i <= SUBTICK_COUNT; i++) {
+        for (let i = 1; i <= axisSubTickCount; i++) {
           const subTickX = x + interval * i;
 
           g.append("line")
             .attr("x1", subTickX)
             .attr("x2", subTickX)
-            .attr("y1", -SUBTICK_SIZE)
+            .attr("y1", -axisSubTickSize)
             .attr("y2", 0)
             .attr("stroke", "currentColor")
             .attr("stroke-opacity", 0.5);
         }
       }
     });
-  }, [width, scale, tickCount]);
+  }, [width, scale, axisTickCount, axisSubTickCount]);
 
-  return <svg ref={axisRef} width={width} height={height} />;
+  return <svg ref={axisRef} width={width} height={axisHeight} />;
 };

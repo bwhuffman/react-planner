@@ -3,9 +3,7 @@ import { TimeAxis } from "./TimeAxis";
 import { Tasks } from "./Tasks";
 
 // helpers
-import { useTaskStore } from "../store/store";
-
-import { usePlanner } from "../hooks/usePlanner";
+import { usePlannerStore, useTaskStore } from "../store/store";
 import { useScale } from "../hooks/useScale";
 
 // utils
@@ -13,6 +11,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getRandomTimeInRange } from "../utils";
 import { utcDay } from "d3-time";
 import Inspector from "./Inspector";
+import { TimeGrid } from "./TimeGrid";
 
 const utcPlanStart = new Date(Date.UTC(2025, 2, 2, 0, 0, 0));
 const utcPlanEnd = utcDay.offset(utcPlanStart, 1);
@@ -21,8 +20,8 @@ export default function Planner() {
   const tasks = useTaskStore((state) => state.tasks);
   const addTasks = useTaskStore((state) => state.addTasks);
   const deleteTasks = useTaskStore((state) => state.deleteTasks);
+  const width = usePlannerStore((state) => state.width);
 
-  const { width, height } = usePlanner();
   const { scale } = useScale({
     startDate: utcPlanStart,
     endDate: utcPlanEnd,
@@ -59,8 +58,9 @@ export default function Planner() {
         </div>
       </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
-        <div>
-          <TimeAxis scale={scale} width={width} height={height} />
+        <div style={{ position: "relative" }}>
+          <TimeGrid scale={scale} width={width} />
+          <TimeAxis scale={scale} />
           <Tasks scale={scale} width={width} />
         </div>
         <Inspector />
