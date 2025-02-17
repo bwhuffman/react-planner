@@ -1,24 +1,25 @@
-import { useState, useEffect, useRef } from "react";
-import { Task } from "./Task";
+import { useEffect, useRef } from "react";
 
 import { select } from "d3-selection";
 import { ScaleTime } from "d3-scale";
 
 // types
-import { Task as TaskType } from "../types";
+import { useTaskStore } from "../store/store";
 
 interface TasksProps {
   scale: ScaleTime<number, number>;
-  tasks: TaskType[];
   width: number;
 }
 
-export function Tasks({ tasks, scale, width }: TasksProps) {
-  const tasksRef = useRef(null);
-  const [selectedTask, setSelectedTask] = useState<TaskType | null>(null);
+// CONFIGURATIONS
+const TASK_HEIGHT = 20;
+const TASK_PADDING = 4; // Added padding between tasks
 
-  const TASK_HEIGHT = 20;
-  const TASK_PADDING = 4; // Added padding between tasks
+export function Tasks({ scale, width }: TasksProps) {
+  const tasksRef = useRef(null);
+  const tasks = useTaskStore((state) => state.tasks);
+  const selectedTasks = useTaskStore((state) => state.selectedTasks);
+  const setSelectedTasks = useTaskStore((state) => state.setSelectedTasks);
 
   useEffect(() => {
     if (!tasksRef.current) return;
@@ -38,7 +39,7 @@ export function Tasks({ tasks, scale, width }: TasksProps) {
       .on("click", (event, d) => {
         event.preventDefault();
         console.log(d);
-        setSelectedTask(d);
+        setSelectedTasks([d]);
       });
 
     taskGroups
@@ -48,7 +49,7 @@ export function Tasks({ tasks, scale, width }: TasksProps) {
       .attr("height", TASK_HEIGHT) // Updated to use TASK_HEIGHT
       .attr("fill", (d) => d.color || "black")
       .attr("stroke", (d) =>
-        selectedTask && selectedTask.id === d.id ? "blue" : "none"
+        selectedTasks.find((t) => t.id === d.id) ? "blue" : "none"
       ) // Set border color for selected task
       .attr("stroke-width", 2); // Optional: set stroke width
 
@@ -58,7 +59,7 @@ export function Tasks({ tasks, scale, width }: TasksProps) {
       .attr("y", TASK_HEIGHT / 2 + 5) // Center the text vertically in the rectangle
       .text((d) => d.label)
       .attr("fill", "white"); // Optional: set text color
-  }, [width, tasks, selectedTask]); // Added selectedTask to dependencies
+  }, [width, tasks, selectedTasks]); // Added selectedTask to dependencies
 
   return (
     <svg
