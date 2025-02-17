@@ -1,3 +1,22 @@
+:root {
+  /* colors */
+  --rp-color-accent: #1626ff;
+  --rp-color-neutral-900: #111111;
+  --rp-color-neutral-100: #f0f0f0;
+  /* spacing */
+  --rp-spacing-1: 4px;
+  --rp-spacing-2: 8px;
+  --rp-spacing-3: 12px;
+  --rp-spacing-4: 16px;
+  --rp-spacing-5: 20px;
+  --rp-spacing-6: 24px;
+  --rp-spacing-7: 32px;
+  --rp-spacing-8: 48px;
+  --rp-spacing-9: 64px;
+  --rp-spacing-10: 96px;
+}
+
+/* reset */
 * {
   margin: 0;
   padding: 0;

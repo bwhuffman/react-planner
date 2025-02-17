@@ -1,48 +1,60 @@
+// components
 import { TimeAxis } from "./TimeAxis";
-import { v4 as uuidv4 } from "uuid";
+import { Tasks } from "./Tasks";
+
+// helpers
 import { useTasks } from "../hooks/useTasks";
-import { Task } from "../types";
-import { scaleUtc } from "d3-scale";
+import { usePlanner } from "../hooks/usePlanner";
+import { useScale } from "../hooks/useScale";
+
+// utils
+import { v4 as uuidv4 } from "uuid";
+import { getRandomTimeInRange } from "../utils";
+import { utcDay } from "d3-time";
+
+const utcPlanStart = new Date(Date.UTC(2025, 2, 2, 0, 0, 0));
+const utcPlanEnd = utcDay.offset(utcPlanStart, 1);
 
 export default function Planner() {
-  const { tasks, addTask, deleteTask } = useTasks();
+  const { tasks, addTasks, deleteTasks } = useTasks();
+  const { width, height } = usePlanner();
+  const { scale } = useScale({
+    startDate: utcPlanStart,
+    endDate: utcPlanEnd,
+    width: width,
+  });
 
-  const x = scaleUtc(
-    [new Date("2000-01-01"), new Date("2000-01-02")],
-    [0, 960]
-  );
-  x(new Date("2000-01-01T05:00Z")); // 200
-  x(new Date("2000-01-01T16:00Z")); // 640
-  x.invert(200); // 2000-01-01T05:00Z
-  x.invert(640); // 2000-01-01T16:00Z
+  const handleAddTask = () => {
+    const timeRange = getRandomTimeInRange(utcPlanStart, utcPlanEnd);
+    addTasks([
+      {
+        id: uuidv4(),
+        label: "New Task",
+        start: timeRange.start,
+        end: timeRange.end,
+        color:
+          "#" + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0"),
+      },
+    ]);
+  };
+
+  const handleDeleteTasks = () => {
+    deleteTasks([...tasks.map((task) => task.id)]);
+  };
 
   return (
-    <div>
-      <TimeAxis
-        startDate={new Date("2000-01-01")}
-        endDate={new Date("2000-01-02")}
-      />
-      <hr />
-      <button
-        onClick={() =>
-          addTask({
-            id: uuidv4(),
-            label: "New Task",
-            start: new Date(),
-            end: new Date(),
-          })
-        }
-      >
-        Add Task
-      </button>
-      {tasks.map((task: Task) => (
-        <div key={task.id} style={{ border: "1px solid #000000" }}>
-          <div>{task.label}</div>
-          <div>{task.start.toISOString()}</div>
-          <div>{task.end.toISOString()}</div>
-          <button onClick={() => deleteTask(task.id)}>Delete Task</button>
+    <div className="planner">
+      <div className="header">
+        <div className="header-title">
+          <h1>Planner</h1>
         </div>
-      ))}
+        <div className="header-actions">
+          <button onClick={handleAddTask}>Add Task</button>
+          <button onClick={handleDeleteTasks}>Reset</button>
+        </div>
+      </div>
+      <TimeAxis scale={scale} width={width} height={height} />
+      <Tasks tasks={tasks} scale={scale} width={width} />
     </div>
   );
 }

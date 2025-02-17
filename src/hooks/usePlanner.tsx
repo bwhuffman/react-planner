@@ -1,7 +1,9 @@
 import { createContext, useContext, ReactNode } from "react";
-import { useTasks } from "./useTasks";
 
-interface PlannerContextType {}
+interface PlannerContextType {
+  width: number;
+  height: number;
+}
 
 const PlannerContext = createContext<PlannerContextType | undefined>(undefined);
 
@@ -10,10 +12,12 @@ interface PlannerProviderProps {
 }
 
 export function PlannerProvider({ children }: PlannerProviderProps) {
-  const tasks = useTasks();
+  const width = 960;
+  const height = 48;
 
   const value = {
-    ...tasks,
+    width,
+    height,
   };
 
   return (

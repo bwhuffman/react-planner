@@ -1,17 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { select } from "d3-selection";
-import { scaleUtc } from "d3-scale";
 import { axisTop } from "d3-axis";
+import { ScaleTime } from "d3-scale";
 
 type TimeAxisProps = {
-  startDate: Date;
-  endDate: Date;
   tickCount?: number;
+  scale: ScaleTime<number, number>;
+  width: number;
+  height: number;
 };
 
-export const TimeAxis = ({ startDate, endDate, tickCount }: TimeAxisProps) => {
+export const TimeAxis = ({
+  scale,
+  width,
+  height,
+  tickCount,
+}: TimeAxisProps) => {
   const axisRef = useRef(null);
-  const [width, setWidth] = useState(window.innerWidth);
 
   // set default values
   // TODO: let users configure ticks
@@ -19,14 +24,13 @@ export const TimeAxis = ({ startDate, endDate, tickCount }: TimeAxisProps) => {
   const SUBTICK_SIZE = 4;
   const TICK_COUNT = tickCount || width / 100;
   const SUBTICK_COUNT = 4;
-  const margins = { left: 0, right: 0 };
 
   // update width on resize
-  useEffect(() => {
-    const updateWidth = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
+  // useEffect(() => {
+  //   const updateWidth = () => setWidth(window.innerWidth);
+  //   window.addEventListener("resize", updateWidth);
+  //   return () => window.removeEventListener("resize", updateWidth);
+  // }, []);
 
   // update axis on width change
   useEffect(() => {
@@ -35,16 +39,12 @@ export const TimeAxis = ({ startDate, endDate, tickCount }: TimeAxisProps) => {
     const svg = select(axisRef.current);
     svg.selectAll("*").remove();
 
-    const scale = scaleUtc()
-      .domain([startDate, endDate])
-      .range([margins.left, width - margins.right]);
-
     const axis = axisTop(scale)
       .ticks(TICK_COUNT)
       .tickSize(TICK_SIZE)
       .tickSizeOuter(0);
 
-    const g = svg.append("g").attr("transform", `translate(0, 20)`);
+    const g = svg.append("g").attr("transform", `translate(0, ${height})`);
 
     g.call(axis);
 
@@ -72,7 +72,7 @@ export const TimeAxis = ({ startDate, endDate, tickCount }: TimeAxisProps) => {
         }
       }
     });
-  }, [width, startDate, endDate, tickCount]);
+  }, [width, scale, tickCount]);
 
-  return <svg ref={axisRef} width={width} height={50} />;
+  return <svg ref={axisRef} width={width} height={height} />;
 };
