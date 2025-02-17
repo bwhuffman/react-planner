@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import { Task } from "../types";
+import { ScaleTime } from "d3-scale";
+import { scaleUtc } from "d3-scale";
 
 interface TaskStore {
   tasks: Task[];
@@ -72,4 +74,22 @@ export const usePlannerStore = create<PlannerStore>((set) => ({
   axisSubTickCount: 4,
   axisTickSize: 6,
   axisSubTickSize: 3,
+}));
+
+interface ScaleStore {
+  scale: ScaleTime<number, number>;
+  startDate: Date;
+  endDate: Date;
+}
+
+export const useScaleStore = create<ScaleStore>((set) => ({
+  // plan start and end dates
+  startDate: new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
+  endDate: new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
+  scale: scaleUtc()
+    .domain([
+      new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
+      new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
+    ])
+    .range([0, 960]),
 }));

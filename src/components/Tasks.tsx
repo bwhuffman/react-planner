@@ -1,25 +1,21 @@
 import { useEffect, useRef } from "react";
 
 import { select } from "d3-selection";
-import { ScaleTime } from "d3-scale";
 
 // types
-import { useTaskStore } from "../store/store";
-
-interface TasksProps {
-  scale: ScaleTime<number, number>;
-  width: number;
-}
+import { usePlannerStore, useScaleStore, useTaskStore } from "../store/store";
 
 // CONFIGURATIONS
 const TASK_HEIGHT = 20;
 const TASK_PADDING = 4; // Added padding between tasks
 
-export function Tasks({ scale, width }: TasksProps) {
+export function Tasks() {
   const tasksRef = useRef(null);
   const tasks = useTaskStore((state) => state.tasks);
   const selectedTasks = useTaskStore((state) => state.selectedTasks);
   const setSelectedTasks = useTaskStore((state) => state.setSelectedTasks);
+  const scale = useScaleStore((state) => state.scale);
+  const width = usePlannerStore((state) => state.width);
 
   useEffect(() => {
     if (!tasksRef.current) return;

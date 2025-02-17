@@ -1,17 +1,16 @@
 // components
+import { TimeGrid } from "./TimeGrid";
 import { TimeAxis } from "./TimeAxis";
 import { Tasks } from "./Tasks";
+import Inspector from "./Inspector";
 
-// helpers
-import { usePlannerStore, useTaskStore } from "../store/store";
-import { useScale } from "../hooks/useScale";
+// hooks
+import { useTaskStore } from "../store/store";
 
 // utils
 import { v4 as uuidv4 } from "uuid";
-import { getRandomTimeInRange } from "../utils";
+import { getRandomTimeInRange, getHexColor } from "../utils";
 import { utcDay } from "d3-time";
-import Inspector from "./Inspector";
-import { TimeGrid } from "./TimeGrid";
 
 const utcPlanStart = new Date(Date.UTC(2025, 2, 2, 0, 0, 0));
 const utcPlanEnd = utcDay.offset(utcPlanStart, 1);
@@ -20,13 +19,6 @@ export default function Planner() {
   const tasks = useTaskStore((state) => state.tasks);
   const addTasks = useTaskStore((state) => state.addTasks);
   const deleteTasks = useTaskStore((state) => state.deleteTasks);
-  const width = usePlannerStore((state) => state.width);
-
-  const { scale } = useScale({
-    startDate: utcPlanStart,
-    endDate: utcPlanEnd,
-    width: width,
-  });
 
   const handleAddTask = () => {
     const timeRange = getRandomTimeInRange(utcPlanStart, utcPlanEnd);
@@ -36,8 +28,7 @@ export default function Planner() {
         label: "New Task",
         start: timeRange.start,
         end: timeRange.end,
-        color:
-          "#" + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0"),
+        color: getHexColor(),
       },
     ]);
   };
@@ -59,9 +50,9 @@ export default function Planner() {
       </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div style={{ position: "relative" }}>
-          <TimeGrid scale={scale} width={width} />
-          <TimeAxis scale={scale} />
-          <Tasks scale={scale} width={width} />
+          <TimeGrid />
+          <TimeAxis />
+          <Tasks />
         </div>
         <Inspector />
       </div>

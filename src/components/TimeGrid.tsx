@@ -1,21 +1,15 @@
 import { useEffect, useRef } from "react";
 import { select } from "d3-selection";
-import { ScaleTime } from "d3-scale";
-import { usePlannerStore } from "../store/store";
+import { usePlannerStore, useScaleStore } from "../store/store";
 
-type TimeGridProps = {
-  scale: ScaleTime<number, number>;
-  tickCount?: number;
-};
-
-export const TimeGrid = ({ scale }: TimeGridProps) => {
+export const TimeGrid = () => {
   const gridRef = useRef(null);
   const width = usePlannerStore((state) => state.width);
   const height = usePlannerStore((state) => state.height);
   const axisHeight = usePlannerStore((state) => state.axisHeight);
   const axisTickCount = usePlannerStore((state) => state.axisTickCount);
   const axisSubTickCount = usePlannerStore((state) => state.axisSubTickCount);
-  // const tickCount = tickCount || width / 100;
+  const scale = useScaleStore((state) => state.scale);
 
   useEffect(() => {
     if (!gridRef.current) return;

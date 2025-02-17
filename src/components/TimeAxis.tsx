@@ -1,14 +1,9 @@
 import { useEffect, useRef } from "react";
 import { select } from "d3-selection";
 import { axisTop } from "d3-axis";
-import { ScaleTime } from "d3-scale";
-import { usePlannerStore } from "../store/store";
+import { usePlannerStore, useScaleStore } from "../store/store";
 
-type TimeAxisProps = {
-  scale: ScaleTime<number, number>;
-};
-
-export const TimeAxis = ({ scale }: TimeAxisProps) => {
+export const TimeAxis = () => {
   const axisRef = useRef(null);
   const width = usePlannerStore((state) => state.width);
   const axisHeight = usePlannerStore((state) => state.axisHeight);
@@ -16,6 +11,7 @@ export const TimeAxis = ({ scale }: TimeAxisProps) => {
   const axisSubTickCount = usePlannerStore((state) => state.axisSubTickCount);
   const axisTickSize = usePlannerStore((state) => state.axisTickSize);
   const axisSubTickSize = usePlannerStore((state) => state.axisSubTickSize);
+  const scale = useScaleStore((state) => state.scale);
 
   // update axis on width change
   useEffect(() => {
