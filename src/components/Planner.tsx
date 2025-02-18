@@ -3,9 +3,10 @@ import { TimeGrid } from "./TimeGrid";
 import { TimeAxis } from "./TimeAxis";
 import { Tasks } from "./Tasks";
 import Inspector from "./Inspector";
+import { TimeRangeSlider } from "./TimeRangeSlider";
 
 // hooks
-import { useTaskStore } from "../store/store";
+import { useScaleStore, useTaskStore } from "../store/store";
 
 // utils
 import { v4 as uuidv4 } from "uuid";
@@ -19,6 +20,10 @@ export default function Planner() {
   const tasks = useTaskStore((state) => state.tasks);
   const addTasks = useTaskStore((state) => state.addTasks);
   const deleteTasks = useTaskStore((state) => state.deleteTasks);
+  const startDate = useScaleStore((state) => state.startDate);
+  const endDate = useScaleStore((state) => state.endDate);
+  const viewStartDate = useScaleStore((state) => state.viewStartDate);
+  const viewEndDate = useScaleStore((state) => state.viewEndDate);
 
   const handleAddTask = () => {
     const timeRange = getRandomTimeInRange(utcPlanStart, utcPlanEnd);
@@ -42,6 +47,14 @@ export default function Planner() {
       <div className="header">
         <div className="header-title">
           <h1>Planner</h1>
+          <div>
+            <div>
+              {startDate.toISOString()} - {endDate.toISOString()}
+            </div>
+            <div style={{ color: "#ccc" }}>
+              {viewStartDate.toISOString()} - {viewEndDate.toISOString()}
+            </div>
+          </div>
         </div>
         <div className="header-actions">
           <button onClick={handleAddTask}>Add Task</button>
@@ -50,6 +63,7 @@ export default function Planner() {
       </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div style={{ position: "relative" }}>
+          <TimeRangeSlider />
           <TimeGrid />
           <TimeAxis />
           <Tasks />

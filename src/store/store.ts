@@ -80,16 +80,42 @@ interface ScaleStore {
   scale: ScaleTime<number, number>;
   startDate: Date;
   endDate: Date;
+  viewStartDate: Date; // Current view window
+  viewEndDate: Date; // Current view window
+  setViewRange: (start: Date, end: Date) => void;
+  zoomToFit: () => void;
 }
 
-export const useScaleStore = create<ScaleStore>((set) => ({
-  // plan start and end dates
+export const useScaleStore = create<ScaleStore>((set, get) => ({
+  // Full date range
   startDate: new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
   endDate: new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
+
+  // Initial view is full range
+  viewStartDate: new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
+  viewEndDate: new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
+
+  // scale
   scale: scaleUtc()
     .domain([
       new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
       new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
     ])
     .range([0, 960]),
+
+  // set view range
+  setViewRange: (viewStartDate: Date, viewEndDate: Date) => {
+    const width = usePlannerStore.getState().width;
+    set(() => ({
+      viewStartDate,
+      viewEndDate,
+      scale: scaleUtc().domain([viewStartDate, viewEndDate]).range([0, width]),
+    }));
+  },
+
+  // zoom to fit
+  zoomToFit: () => {
+    const { startDate, endDate } = get();
+    get().setViewRange(startDate, endDate);
+  },
 }));

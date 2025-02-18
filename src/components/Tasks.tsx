@@ -55,7 +55,7 @@ export function Tasks() {
       .attr("y", TASK_HEIGHT / 2 + 5) // Center the text vertically in the rectangle
       .text((d) => d.label)
       .attr("fill", "white"); // Optional: set text color
-  }, [width, tasks, selectedTasks]); // Added selectedTask to dependencies
+  }, [width, tasks, selectedTasks, scale]);
 
   return (
     <svg
@@ -63,5 +63,5 @@ export function Tasks() {
       width={width}
       height={tasks.length * (TASK_HEIGHT + TASK_PADDING)}
     />
-  ); // Updated height calculation
+  );
 }
