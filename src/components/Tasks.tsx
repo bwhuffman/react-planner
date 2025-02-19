@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
-
 import { select } from "d3-selection";
 
 // types
 import { usePlannerStore, useScaleStore, useTaskStore } from "../store/store";
+import { Task as TaskType } from "../types";
 
 // CONFIGURATIONS
 const TASK_HEIGHT = 20;
@@ -17,51 +17,99 @@ export function Tasks() {
   const scale = useScaleStore((state) => state.scale);
   const width = usePlannerStore((state) => state.width);
 
+  // Group tasks by channelId
+  const groupedTasks: { [key: string]: TaskType[] } = tasks.reduce(
+    (acc, task) => {
+      if (!acc[task.channelId]) {
+        acc[task.channelId] = [];
+      }
+      acc[task.channelId].push(task);
+      return acc;
+    },
+    {} as { [key: string]: TaskType[] }
+  );
+
+  const channelCount = Object.keys(groupedTasks).length;
+
+  console.log(JSON.stringify(groupedTasks, null, 2));
+
   useEffect(() => {
     if (!tasksRef.current) return;
 
     const tasksSvg = select(tasksRef.current);
     tasksSvg.selectAll("*").remove();
 
+    const channelIds = Object.keys(groupedTasks);
+    console.log("channel IDs", channelIds);
+
     const taskGroups = tasksSvg
       .selectAll("g")
-      .data(tasks)
+      .data(channelIds)
       .enter()
       .append("g")
+      .attr("class", (d) => `channel-${d}`)
       .attr(
         "transform",
-        (_, i) => `translate(0, ${i * (TASK_HEIGHT + TASK_PADDING)})`
-      ) // Updated to use TASK_HEIGHT and TASK_PADDING
-      .on("click", (event, d) => {
-        event.preventDefault();
-        console.log(d);
-        setSelectedTasks([d]);
+        (_, channelIndex) =>
+          `translate(0, ${channelIndex * (TASK_HEIGHT + TASK_PADDING)})`
+      );
+
+    // Create rectangles and text for each task in the grouped tasks
+    channelIds.forEach((channelId, channelIndex) => {
+      const tasksInChannel = groupedTasks[channelId];
+
+      tasksInChannel.forEach((task, taskIndex) => {
+        console.log(task);
+
+        const taskGroup = tasksSvg
+          .selectAll("g") // select channel
+          .filter((d) => d === channelId)
+          .append("g") // append task to channel
+          .attr("class", (d) => `task-${d}`)
+          .attr("transform", `translate(${scale(new Date(task.start))}, 0)`); //translate(${scale(new Date(task.start))}, ${i * (TASK_HEIGHT + TASK_PADDING)})`
+
+        taskGroup
+          .append("rect")
+          .attr(
+            "width",
+            scale(new Date(task.end)) - scale(new Date(task.start))
+          )
+          // .attr(
+          //   "transform",
+          //   `translate(${scale(new Date(task.start))}, ${
+          //     TASK_HEIGHT + TASK_PADDING
+          //   })`
+          // )
+          .attr("height", TASK_HEIGHT)
+          .attr("fill", task.color || "black")
+          .attr("opacity", 0.5)
+          .attr(
+            "stroke",
+            selectedTasks.find((t) => t.id === task.id) ? "blue" : "none"
+          )
+          .attr("stroke-width", 2)
+          .on("click", (event, d) => {
+            event.preventDefault();
+            console.log(d);
+            setSelectedTasks([task]);
+          });
+
+        taskGroup
+          .append("text")
+          .attr("x", 5) // Align text to the start of the task
+          .attr("y", TASK_HEIGHT / 2 + 5) // Center the text vertically in the rectangle
+          .text(task.label)
+          .attr("fill", "white")
+          .attr("style", "pointer-events: none"); // Optional: set text color
       });
-
-    taskGroups
-      .append("rect")
-      .attr("x", (d) => scale(new Date(d.start)))
-      .attr("width", (d) => scale(new Date(d.end)) - scale(new Date(d.start)))
-      .attr("height", TASK_HEIGHT) // Updated to use TASK_HEIGHT
-      .attr("fill", (d) => d.color || "black")
-      .attr("stroke", (d) =>
-        selectedTasks.find((t) => t.id === d.id) ? "blue" : "none"
-      ) // Set border color for selected task
-      .attr("stroke-width", 2); // Optional: set stroke width
-
-    taskGroups
-      .append("text")
-      .attr("x", (d) => scale(new Date(d.start)) + 5) // Align text to the start of the task
-      .attr("y", TASK_HEIGHT / 2 + 5) // Center the text vertically in the rectangle
-      .text((d) => d.label)
-      .attr("fill", "white"); // Optional: set text color
+    });
   }, [width, tasks, selectedTasks, scale]);
 
   return (
     <svg
       ref={tasksRef}
       width={width}
-      height={tasks.length * (TASK_HEIGHT + TASK_PADDING)}
+      height={channelCount * (TASK_HEIGHT + TASK_PADDING)}
     />
   );
 }

@@ -27,12 +27,24 @@ export default function Planner() {
 
   const handleAddTask = () => {
     const timeRange = getRandomTimeInRange(utcPlanStart, utcPlanEnd);
+    const timeRange2 = getRandomTimeInRange(utcPlanStart, utcPlanEnd);
+    const channelId = uuidv4();
+
     addTasks([
       {
         id: uuidv4(),
+        channelId: channelId,
         label: "New Task",
         start: timeRange.start,
         end: timeRange.end,
+        color: getHexColor(),
+      },
+      {
+        id: uuidv4(),
+        channelId: channelId,
+        label: "New Task 2",
+        start: timeRange2.start,
+        end: timeRange2.end,
         color: getHexColor(),
       },
     ]);

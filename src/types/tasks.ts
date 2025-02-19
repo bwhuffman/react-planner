@@ -1,5 +1,6 @@
 export type Task = {
   id: string;
+  channelId: string;
   label: string;
   start: Date;
   end: Date;
