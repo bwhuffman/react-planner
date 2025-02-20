@@ -3,7 +3,7 @@ import { TimeGrid } from "./TimeGrid";
 import { TimeAxis } from "./TimeAxis";
 import { Tasks } from "./Tasks";
 import Inspector from "./Inspector";
-import { TimeRangeSlider } from "./TimeRangeSlider";
+import { TimeBrush } from "./TimeBrush";
 
 // hooks
 import { useScaleStore, useTaskStore } from "../store/store";
@@ -75,7 +75,7 @@ export default function Planner() {
       </div>
       <div style={{ display: "flex", flexDirection: "row" }}>
         <div style={{ position: "relative" }}>
-          <TimeRangeSlider />
+          <TimeBrush />
           <TimeGrid />
           <TimeAxis />
           <Tasks />

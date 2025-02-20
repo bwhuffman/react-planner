@@ -7,3 +7,11 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.rp-tooltip {
+  position: relative;
+  background: lightgrey;
+  padding: var(--rp-spacing-1);
+  border-radius: var(--rp-radius-sm);
+  pointer-events: none;
+}

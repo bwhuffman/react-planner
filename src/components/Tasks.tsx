@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { select } from "d3-selection";
+import { useEffect, useRef, useMemo } from "react";
+import { select, pointer } from "d3-selection";
 
 // types
 import { usePlannerStore, useScaleStore, useTaskStore } from "../store/store";
@@ -16,16 +16,15 @@ export function Tasks() {
   const taskPadding = usePlannerStore((state) => state.taskPadding);
 
   // Group tasks by channelId
-  const groupedTasks: { [key: string]: TaskType[] } = tasks.reduce(
-    (acc, task) => {
+  const groupedTasks = useMemo(() => {
+    return tasks.reduce((acc, task) => {
       if (!acc[task.channelId]) {
         acc[task.channelId] = [];
       }
       acc[task.channelId].push(task);
       return acc;
-    },
-    {} as { [key: string]: TaskType[] }
-  );
+    }, {} as { [key: string]: TaskType[] });
+  }, [tasks]);
 
   const channelCount = Object.keys(groupedTasks).length;
 
@@ -61,24 +60,19 @@ export function Tasks() {
         const taskGroup = tasksSvg
           .select(`.channel-${channelId}`) // Select the specific channel group
           .append("g") // append task to channel
-          .attr("class", (d) => `task-${d}`)
+          .attr("class", (d) => `rp-task-group task-${d}`)
           .attr("transform", `translate(${scale(new Date(task.start))}, 0)`); //translate(${scale(new Date(task.start))}, ${i * (TASK_HEIGHT + TASK_PADDING)})`
 
         taskGroup
           .append("rect")
+          .attr("class", "rp-task")
           .attr(
             "width",
             scale(new Date(task.end)) - scale(new Date(task.start))
           )
-          // .attr(
-          //   "transform",
-          //   `translate(${scale(new Date(task.start))}, ${
-          //     TASK_HEIGHT + TASK_PADDING
-          //   })`
-          // )
           .attr("height", taskHeight)
           .attr("fill", task.color || "black")
-          .attr("opacity", 0.5)
+          .attr("opacity", 0.8)
           .attr(
             "stroke",
             selectedTasks.find((t) => t.id === task.id) ? "blue" : "none"
@@ -94,15 +88,15 @@ export function Tasks() {
           .append("text")
           .attr("x", 5) // Align text to the start of the task
           .attr("y", taskHeight / 2 + 5) // Center the text vertically in the rectangle
-          .text(task.label)
-          .attr("fill", "white")
-          .attr("style", "pointer-events: none"); // Optional: set text color
+          .attr("class", "rp-task-label")
+          .text(task.label); // Optional: set text color
       });
     });
   }, [width, tasks, selectedTasks, scale]);
 
   return (
     <svg
+      className="rp-tasks"
       ref={tasksRef}
       width={width}
       height={channelCount * (taskHeight + taskPadding)}

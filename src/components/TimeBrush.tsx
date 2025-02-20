@@ -4,7 +4,7 @@ import { brushX } from "d3-brush";
 import { scaleUtc } from "d3-scale";
 import { useScaleStore, usePlannerStore } from "../store/store";
 
-export const TimeRangeSlider = () => {
+export const TimeBrush = () => {
   const brushRef = useRef(null);
   const width = usePlannerStore((state) => state.width);
   const height = 40; // Height of the slider
@@ -66,8 +66,13 @@ export const TimeRangeSlider = () => {
   }, [width, height, sliderScale, viewStartDate, viewEndDate, onBrush]);
 
   return (
-    <div className="time-range-slider">
-      <svg ref={brushRef} width={width} height={height} />
+    <div className="time-brush">
+      <svg
+        className="rp-time-brush"
+        ref={brushRef}
+        width={width}
+        height={height}
+      />
     </div>
   );
 };

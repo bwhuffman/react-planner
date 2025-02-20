@@ -55,5 +55,12 @@ export const TimeAxis = () => {
     });
   }, [width, scale, axisTickCount, axisSubTickCount]);
 
-  return <svg ref={axisRef} width={width} height={axisHeight} />;
+  return (
+    <svg
+      className="rp-time-axis"
+      ref={axisRef}
+      width={width}
+      height={axisHeight}
+    />
+  );
 };

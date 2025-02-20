@@ -56,10 +56,10 @@ export const TimeGrid = () => {
 
   return (
     <svg
+      className="rp-time-grid"
       ref={gridRef}
       width={width}
       height={height - axisHeight}
-      style={{ position: "absolute", pointerEvents: "none" }}
     />
   );
 };
