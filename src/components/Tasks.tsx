@@ -31,7 +31,7 @@ export function Tasks() {
 
   const channelCount = Object.keys(groupedTasks).length;
 
-  console.log(JSON.stringify(groupedTasks, null, 2));
+  console.log("grouped tasks", groupedTasks);
 
   useEffect(() => {
     if (!tasksRef.current) return;
@@ -39,9 +39,10 @@ export function Tasks() {
     const tasksSvg = select(tasksRef.current);
     tasksSvg.selectAll("*").remove();
 
+    // get channel IDs
     const channelIds = Object.keys(groupedTasks);
-    console.log("channel IDs", channelIds);
 
+    // create channel groups
     const taskGroups = tasksSvg
       .selectAll("g")
       .data(channelIds)
@@ -59,11 +60,8 @@ export function Tasks() {
       const tasksInChannel = groupedTasks[channelId];
 
       tasksInChannel.forEach((task, taskIndex) => {
-        console.log(task);
-
         const taskGroup = tasksSvg
-          .selectAll("g") // select channel
-          .filter((d) => d === channelId)
+          .select(`.channel-${channelId}`) // Select the specific channel group
           .append("g") // append task to channel
           .attr("class", (d) => `task-${d}`)
           .attr("transform", `translate(${scale(new Date(task.start))}, 0)`); //translate(${scale(new Date(task.start))}, ${i * (TASK_HEIGHT + TASK_PADDING)})`
