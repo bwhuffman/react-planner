@@ -56,6 +56,8 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
 interface PlannerStore {
   width: number;
   height: number;
+  taskHeight: number;
+  taskPadding: number;
   axisHeight: number;
   axisTickCount: number;
   axisSubTickCount: number;
@@ -74,6 +76,9 @@ export const usePlannerStore = create<PlannerStore>((set) => ({
   axisSubTickCount: 4,
   axisTickSize: 6,
   axisSubTickSize: 3,
+  // task
+  taskHeight: 20,
+  taskPadding: 4,
 }));
 
 interface ScaleStore {

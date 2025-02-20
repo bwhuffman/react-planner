@@ -5,10 +5,6 @@ import { select } from "d3-selection";
 import { usePlannerStore, useScaleStore, useTaskStore } from "../store/store";
 import { Task as TaskType } from "../types";
 
-// CONFIGURATIONS
-const TASK_HEIGHT = 20;
-const TASK_PADDING = 4; // Added padding between tasks
-
 export function Tasks() {
   const tasksRef = useRef(null);
   const tasks = useTaskStore((state) => state.tasks);
@@ -16,6 +12,8 @@ export function Tasks() {
   const setSelectedTasks = useTaskStore((state) => state.setSelectedTasks);
   const scale = useScaleStore((state) => state.scale);
   const width = usePlannerStore((state) => state.width);
+  const taskHeight = usePlannerStore((state) => state.taskHeight);
+  const taskPadding = usePlannerStore((state) => state.taskPadding);
 
   // Group tasks by channelId
   const groupedTasks: { [key: string]: TaskType[] } = tasks.reduce(
@@ -52,7 +50,7 @@ export function Tasks() {
       .attr(
         "transform",
         (_, channelIndex) =>
-          `translate(0, ${channelIndex * (TASK_HEIGHT + TASK_PADDING)})`
+          `translate(0, ${channelIndex * (taskHeight + taskPadding)})`
       );
 
     // Create rectangles and text for each task in the grouped tasks
@@ -78,7 +76,7 @@ export function Tasks() {
           //     TASK_HEIGHT + TASK_PADDING
           //   })`
           // )
-          .attr("height", TASK_HEIGHT)
+          .attr("height", taskHeight)
           .attr("fill", task.color || "black")
           .attr("opacity", 0.5)
           .attr(
@@ -95,7 +93,7 @@ export function Tasks() {
         taskGroup
           .append("text")
           .attr("x", 5) // Align text to the start of the task
-          .attr("y", TASK_HEIGHT / 2 + 5) // Center the text vertically in the rectangle
+          .attr("y", taskHeight / 2 + 5) // Center the text vertically in the rectangle
           .text(task.label)
           .attr("fill", "white")
           .attr("style", "pointer-events: none"); // Optional: set text color
@@ -107,7 +105,7 @@ export function Tasks() {
     <svg
       ref={tasksRef}
       width={width}
-      height={channelCount * (TASK_HEIGHT + TASK_PADDING)}
+      height={channelCount * (taskHeight + taskPadding)}
     />
   );
 }
