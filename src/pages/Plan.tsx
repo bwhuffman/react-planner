@@ -1,9 +1,9 @@
 // components
 import { ReactPlanner } from "../components/ReactPlanner";
 import { Tasks } from "../components/Tasks";
-import { TimeGrid } from "../components/TimeGrid";
-import { TimeAxis } from "../components/TimeAxis";
-import { TimeBrush } from "../components/TimeBrush";
+import { Background } from "../components/Background";
+import { Axis } from "../components/Axis";
+import { Brush } from "../components/Brush";
 
 import Inspector from "../components/Inspector";
 
@@ -91,9 +91,9 @@ export default function Plan() {
         }}
       >
         <ReactPlanner taskHeight={40} taskPadding={4} axisHeight={48}>
-          <TimeBrush />
-          <TimeAxis />
-          <TimeGrid />
+          <Brush />
+          <Axis />
+          <Background />
           <Tasks />
         </ReactPlanner>
         <Inspector />

@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { select } from "d3-selection";
 import { usePlannerStore, useScaleStore } from "../store/store";
 
-export const TimeGrid = () => {
+export const Background = () => {
   const gridRef = useRef(null);
   const width = usePlannerStore((state) => state.width);
   const height = usePlannerStore((state) => state.height);

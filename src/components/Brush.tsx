@@ -3,7 +3,7 @@ import { select } from "d3-selection";
 import { brushX } from "d3-brush";
 import { useScaleStore, usePlannerStore } from "../store/store";
 
-export const TimeBrush = () => {
+export const Brush = () => {
   const brushRef = useRef(null);
   const width = usePlannerStore((state) => state.width);
   const height = usePlannerStore((state) => state.brushHeight);

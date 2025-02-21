@@ -3,7 +3,7 @@ import { select } from "d3-selection";
 import { axisTop } from "d3-axis";
 import { usePlannerStore, useScaleStore } from "../store/store";
 
-export const TimeAxis = () => {
+export const Axis = () => {
   const axisRef = useRef(null);
   const width = usePlannerStore((state) => state.width);
   const axisHeight = usePlannerStore((state) => state.axisHeight);

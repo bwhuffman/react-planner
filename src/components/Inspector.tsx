@@ -10,6 +10,11 @@ export default function Inspector() {
     setSelectedTasks([]);
   };
 
+  const handleDeselectTask = (id: string) => {
+    const tasks = selectedTasks.filter((task) => task.id !== id);
+    setSelectedTasks(tasks);
+  };
+
   return (
     <div className="inspector">
       <h2>Inspector</h2>
@@ -18,6 +23,9 @@ export default function Inspector() {
           <div style={{ paddingBottom: "16px" }}>
             <h3>Task: {task.label}</h3>
             <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
+            <button onClick={() => handleDeselectTask(task.id)}>
+              Deselect
+            </button>
           </div>
           {Object.entries(task).map(([key, value]) => (
             <div
