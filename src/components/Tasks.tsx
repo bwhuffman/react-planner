@@ -18,6 +18,7 @@ export function Tasks() {
 
   // Group tasks by channelId
   const groupedTasks = useMemo(() => {
+    console.log("grouping tasks");
     return tasks.reduce((acc, task) => {
       if (!acc[task.channelId]) {
         acc[task.channelId] = [];
@@ -28,17 +29,13 @@ export function Tasks() {
   }, [tasks]);
 
   const channelCount = Object.keys(groupedTasks).length;
-
-  console.log("grouped tasks", groupedTasks);
+  const channelIds = Object.keys(groupedTasks);
 
   useEffect(() => {
     if (!tasksRef.current) return;
 
     const tasksSvg = select(tasksRef.current);
     tasksSvg.selectAll("*").remove();
-
-    // get channel IDs
-    const channelIds = Object.keys(groupedTasks);
 
     // create channel groups
     const taskGroups = tasksSvg
@@ -84,7 +81,6 @@ export function Tasks() {
           .attr("stroke-width", 2)
           .on("click", (event, d) => {
             event.preventDefault();
-            console.log(d);
             setSelectedTasks([task]);
           });
 

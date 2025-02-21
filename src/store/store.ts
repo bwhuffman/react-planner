@@ -164,7 +164,6 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
 
     const newStartDate = new Date((midpointTime + startTime) / 2);
     const newEndDate = new Date((endTime + midpointTime) / 2);
-
     get().setViewRange(newStartDate, newEndDate);
   },
 }));
