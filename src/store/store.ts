@@ -59,6 +59,7 @@ interface PlannerStore {
   taskHeight: number;
   taskPadding: number;
   brushHeight: number;
+  brushColor: string;
   axisHeight: number;
   axisTickCount: number;
   axisSubTickCount: number;
@@ -79,14 +80,16 @@ export const usePlannerStore = create<PlannerStore>((set) => ({
   taskHeight: 20,
   taskPadding: 4,
   brushHeight: 40,
+  brushColor: "#f0f0f0",
 }));
 
 interface ScaleStore {
-  viewScale: ScaleTime<number, number>;
   extentStartDate: Date; // Full date range start date
   extentEndDate: Date; // Full date range end date
+  getExtentScale: () => ScaleTime<number, number>;
   viewStartDate: Date; // Current view window start date
   viewEndDate: Date; // Current view window end date
+  getViewScale: () => ScaleTime<number, number>;
   setViewRange: (start: Date, end: Date) => void;
   zoomToFit: () => void;
   zoomToExtent: () => void;
@@ -98,37 +101,33 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
   // Full date range
   extentStartDate: new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
   extentEndDate: new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
+  getExtentScale: () => {
+    const width = usePlannerStore.getState().width;
+    return scaleUtc()
+      .domain([get().extentStartDate, get().extentEndDate])
+      .range([0, width]);
+  },
 
   // Initial view is full range
   viewStartDate: new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
   viewEndDate: new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
-
-  // scale
-  viewScale: scaleUtc()
-    .domain([
-      new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
-      new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
-    ])
-    .range([0, 960]),
-
+  getViewScale: () => {
+    const width = usePlannerStore.getState().width;
+    return scaleUtc()
+      .domain([get().viewStartDate, get().viewEndDate])
+      .range([0, width]);
+  },
   // set view range
   setViewRange: (viewStartDate: Date, viewEndDate: Date) => {
-    const width = usePlannerStore.getState().width;
     set(() => ({
       viewStartDate: viewStartDate,
       viewEndDate: viewEndDate,
-      viewScale: scaleUtc()
-        .domain([viewStartDate, viewEndDate])
-        .range([0, width]),
     }));
   },
-
-  // zoom to fit
   zoomToExtent: () => {
     const { extentStartDate, extentEndDate } = get();
     get().setViewRange(extentStartDate, extentEndDate);
   },
-  // zoom to fit
   zoomToFit: () => {
     const tasks = useTaskStore.getState().tasks;
     if (tasks.length === 0) return;

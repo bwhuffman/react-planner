@@ -11,7 +11,7 @@ export const TimeAxis = () => {
   const axisSubTickCount = usePlannerStore((state) => state.axisSubTickCount);
   const axisTickSize = usePlannerStore((state) => state.axisTickSize);
   const axisSubTickSize = usePlannerStore((state) => state.axisSubTickSize);
-  const viewScale = useScaleStore((state) => state.viewScale);
+  const viewScale = useScaleStore.getState().getViewScale();
 
   // update axis on width change
   useEffect(() => {

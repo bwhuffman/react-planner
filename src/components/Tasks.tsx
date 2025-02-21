@@ -11,10 +11,10 @@ export function Tasks() {
   const tasks = useTaskStore((state) => state.tasks);
   const selectedTasks = useTaskStore((state) => state.selectedTasks);
   const setSelectedTasks = useTaskStore((state) => state.setSelectedTasks);
-  const viewScale = useScaleStore((state) => state.viewScale);
   const width = usePlannerStore((state) => state.width);
   const taskHeight = usePlannerStore((state) => state.taskHeight);
   const taskPadding = usePlannerStore((state) => state.taskPadding);
+  const viewScale = useScaleStore.getState().getViewScale();
 
   // Group tasks by channelId
   const groupedTasks = useMemo(() => {

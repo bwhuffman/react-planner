@@ -9,7 +9,7 @@ export const TimeGrid = () => {
   const axisHeight = usePlannerStore((state) => state.axisHeight);
   const axisTickCount = usePlannerStore((state) => state.axisTickCount);
   const axisSubTickCount = usePlannerStore((state) => state.axisSubTickCount);
-  const viewScale = useScaleStore((state) => state.viewScale);
+  const viewScale = useScaleStore.getState().getViewScale();
 
   useEffect(() => {
     if (!gridRef.current) return;
