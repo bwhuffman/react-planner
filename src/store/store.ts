@@ -83,8 +83,8 @@ export const usePlannerStore = create<PlannerStore>((set) => ({
 
 interface ScaleStore {
   scale: ScaleTime<number, number>;
-  startDate: Date; // Full date range start date
-  endDate: Date; // Full date range end date
+  extentStartDate: Date; // Full date range start date
+  extentEndDate: Date; // Full date range end date
   viewStartDate: Date; // Current view window start date
   viewEndDate: Date; // Current view window end date
   setViewRange: (start: Date, end: Date) => void;
@@ -96,8 +96,8 @@ interface ScaleStore {
 
 export const useScaleStore = create<ScaleStore>((set, get) => ({
   // Full date range
-  startDate: new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
-  endDate: new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
+  extentStartDate: new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
+  extentEndDate: new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
 
   // Initial view is full range
   viewStartDate: new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
@@ -123,8 +123,8 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
 
   // zoom to fit
   zoomToExtent: () => {
-    const { startDate, endDate } = get();
-    get().setViewRange(startDate, endDate);
+    const { extentStartDate, extentEndDate } = get();
+    get().setViewRange(extentStartDate, extentEndDate);
   },
   // zoom to fit
   zoomToFit: () => {
@@ -143,11 +143,12 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
   },
   // zoom out
   zoomOut: () => {
-    const { viewStartDate, viewEndDate, startDate, endDate } = get();
+    const { viewStartDate, viewEndDate, extentStartDate, extentEndDate } =
+      get();
     const viewStartTime = viewStartDate.getTime();
     const viewEndTime = viewEndDate.getTime();
-    const startTime = startDate.getTime();
-    const endTime = endDate.getTime();
+    const startTime = extentStartDate.getTime();
+    const endTime = extentEndDate.getTime();
 
     const newStartDate = new Date((viewStartTime + startTime) / 2);
     const newEndDate = new Date((viewEndTime + endTime) / 2);

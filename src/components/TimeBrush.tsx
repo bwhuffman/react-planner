@@ -10,14 +10,16 @@ export const TimeBrush = () => {
   const height = usePlannerStore((state) => state.brushHeight);
   const color = "#f0f0f0";
 
-  const startDate = useScaleStore((state) => state.startDate);
-  const endDate = useScaleStore((state) => state.endDate);
+  const extentStartDate = useScaleStore((state) => state.extentStartDate);
+  const extentEndDate = useScaleStore((state) => state.extentEndDate);
   const viewStartDate = useScaleStore((state) => state.viewStartDate);
   const viewEndDate = useScaleStore((state) => state.viewEndDate);
   const setViewRange = useScaleStore((state) => state.setViewRange);
 
   // Create a scale for the full date range
-  const sliderScale = scaleUtc().domain([startDate, endDate]).range([0, width]);
+  const sliderScale = scaleUtc()
+    .domain([extentStartDate, extentEndDate])
+    .range([0, width]);
 
   const onBrush = useCallback(
     (event: any) => {

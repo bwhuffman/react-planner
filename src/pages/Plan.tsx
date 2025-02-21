@@ -22,8 +22,8 @@ export default function Plan() {
   const tasks = useTaskStore((state) => state.tasks);
   const addTasks = useTaskStore((state) => state.addTasks);
   const deleteTasks = useTaskStore((state) => state.deleteTasks);
-  const startDate = useScaleStore((state) => state.startDate);
-  const endDate = useScaleStore((state) => state.endDate);
+  const extentStartDate = useScaleStore((state) => state.extentStartDate);
+  const extentEndDate = useScaleStore((state) => state.extentEndDate);
   const viewStartDate = useScaleStore((state) => state.viewStartDate);
   const viewEndDate = useScaleStore((state) => state.viewEndDate);
   const zoomToFit = useScaleStore((state) => state.zoomToFit);
@@ -67,7 +67,7 @@ export default function Plan() {
           <h1>Planner</h1>
           <div>
             <div>
-              {startDate.toISOString()} - {endDate.toISOString()}
+              {extentStartDate.toISOString()} - {extentEndDate.toISOString()}
             </div>
             <div style={{ color: "#ccc" }}>
               {viewStartDate.toISOString()} - {viewEndDate.toISOString()}
