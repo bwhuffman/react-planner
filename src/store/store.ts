@@ -71,27 +71,27 @@ export const usePlannerStore = create<PlannerStore>((set) => ({
   height: 960,
   setWidth: (width: number) => set({ width }),
   setHeight: (height: number) => set({ height }),
-  // axis
   axisHeight: 48,
   axisTickCount: 8,
   axisSubTickCount: 4,
   axisTickSize: 6,
   axisSubTickSize: 3,
-  // task
   taskHeight: 20,
   taskPadding: 4,
-  // brush
   brushHeight: 40,
 }));
 
 interface ScaleStore {
   scale: ScaleTime<number, number>;
-  startDate: Date;
-  endDate: Date;
-  viewStartDate: Date; // Current view window
-  viewEndDate: Date; // Current view window
+  startDate: Date; // Full date range start date
+  endDate: Date; // Full date range end date
+  viewStartDate: Date; // Current view window start date
+  viewEndDate: Date; // Current view window end date
   setViewRange: (start: Date, end: Date) => void;
   zoomToFit: () => void;
+  zoomToExtent: () => void;
+  zoomOut: () => void;
+  zoomIn: () => void;
 }
 
 export const useScaleStore = create<ScaleStore>((set, get) => ({
@@ -122,8 +122,47 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
   },
 
   // zoom to fit
-  zoomToFit: () => {
+  zoomToExtent: () => {
     const { startDate, endDate } = get();
     get().setViewRange(startDate, endDate);
+  },
+  // zoom to fit
+  zoomToFit: () => {
+    const tasks = useTaskStore.getState().tasks;
+    if (tasks.length === 0) return;
+
+    const earliestStart = Math.min(
+      ...tasks.map((task) => task.start.getTime())
+    );
+    const latestEnd = Math.max(...tasks.map((task) => task.end.getTime()));
+
+    const newStartDate = new Date(earliestStart);
+    const newEndDate = new Date(latestEnd);
+
+    get().setViewRange(newStartDate, newEndDate);
+  },
+  // zoom out
+  zoomOut: () => {
+    const { viewStartDate, viewEndDate, startDate, endDate } = get();
+    const viewStartTime = viewStartDate.getTime();
+    const viewEndTime = viewEndDate.getTime();
+    const startTime = startDate.getTime();
+    const endTime = endDate.getTime();
+
+    const newStartDate = new Date((viewStartTime + startTime) / 2);
+    const newEndDate = new Date((viewEndTime + endTime) / 2);
+    get().setViewRange(newStartDate, newEndDate);
+  },
+  // zoom in
+  zoomIn: () => {
+    const { viewStartDate, viewEndDate } = get();
+    const startTime = viewStartDate.getTime();
+    const endTime = viewEndDate.getTime();
+    const midpointTime = (startTime + endTime) / 2;
+
+    const newStartDate = new Date((midpointTime + startTime) / 2);
+    const newEndDate = new Date((endTime + midpointTime) / 2);
+
+    get().setViewRange(newStartDate, newEndDate);
   },
 }));

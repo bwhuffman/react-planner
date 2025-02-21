@@ -26,6 +26,10 @@ export default function Plan() {
   const endDate = useScaleStore((state) => state.endDate);
   const viewStartDate = useScaleStore((state) => state.viewStartDate);
   const viewEndDate = useScaleStore((state) => state.viewEndDate);
+  const zoomToFit = useScaleStore((state) => state.zoomToFit);
+  const zoomToExtent = useScaleStore((state) => state.zoomToExtent);
+  const zoomOut = useScaleStore((state) => state.zoomOut);
+  const zoomIn = useScaleStore((state) => state.zoomIn);
 
   const handleAddTask = () => {
     const timeRange = getRandomTimeInRange(utcPlanStart, utcPlanEnd);
@@ -72,7 +76,11 @@ export default function Plan() {
         </div>
         <div className="header-actions">
           <button onClick={handleAddTask}>Add Task</button>
-          <button onClick={handleDeleteTasks}>Reset</button>
+          <button onClick={handleDeleteTasks}>Delete All Tasks</button>
+          <button onClick={zoomToFit}>Zoom to Fit</button>
+          <button onClick={zoomToExtent}>Zoom to Extent</button>
+          <button onClick={zoomIn}>Zoom In</button>
+          <button onClick={zoomOut}>Zoom Out</button>
         </div>
       </div>
       <div
@@ -82,7 +90,7 @@ export default function Plan() {
           gridTemplateColumns: "4fr 1fr",
         }}
       >
-        <ReactPlanner>
+        <ReactPlanner taskHeight={40} taskPadding={4} axisHeight={48}>
           <TimeBrush />
           <TimeAxis />
           <TimeGrid />

@@ -1,4 +1,4 @@
-export type Task = {
+export type Task<T = any> = {
   id: string;
   channelId: string;
   label: string;
@@ -7,4 +7,5 @@ export type Task = {
   color?: string;
   hidden?: boolean;
   selected?: boolean;
+  data?: T;
 };

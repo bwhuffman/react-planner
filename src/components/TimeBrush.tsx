@@ -69,8 +69,8 @@ export const TimeBrush = () => {
     <svg
       className="rp-time-brush"
       ref={brushRef}
-      width={width}
       height={height}
+      width={width}
     />
   );
 };
