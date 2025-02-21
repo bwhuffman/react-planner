@@ -4,6 +4,7 @@ import { select } from "d3-selection";
 // types
 import { usePlannerStore, useScaleStore, useTaskStore } from "../store/store";
 import { Task as TaskType } from "../types";
+import { getTimeFromPosition } from "../utils";
 
 export function Tasks() {
   const tasksRef = useRef(null);
@@ -91,6 +92,13 @@ export function Tasks() {
           .attr("class", "rp-task-label")
           .text(task.label); // Optional: set text color
       });
+    });
+
+    // Add mouse move listener to show current time
+    tasksSvg.on("mousemove", (event) => {
+      if (!tasksRef.current) return;
+      // const currentTime = getTimeFromPosition(event, scale, tasksRef.current);
+      // console.log("Hover time:", currentTime.toISOString());
     });
   }, [width, tasks, selectedTasks, scale]);
 

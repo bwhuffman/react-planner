@@ -1,8 +1,16 @@
 # React Planner
 
-React Planner is a customizable React component library for building gantt-like plan charts with extensible playback.
+React Planner is a customizable React component library for building interactive gantt-like charts and schedules.
 
-## Getting Started
+Example applications:
+
+- Gantt charts
+- Project management
+- Task management
+- Audio editors
+- Video editors
+
+## Installation
 
 TBD
 
@@ -11,6 +19,14 @@ TBD
 TBD
 
 ## Team
+
+- [@bwhuffman](https://github.com/bwhuffman)
+
+## Contributing
+
+TBD
+
+## Performance
 
 TBD
 
