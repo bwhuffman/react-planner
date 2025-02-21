@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import { usePlannerStore } from "../store/store";
 
-interface ReactPlannerProps extends PropsWithChildren {
+interface ReactPlannerProps {
   width?: number;
   height?: number;
   taskHeight?: number;
@@ -15,7 +15,6 @@ interface ReactPlannerProps extends PropsWithChildren {
 }
 
 export function ReactPlanner({
-  children,
   width = 960,
   height = 960,
   taskHeight = 20,
@@ -26,7 +25,8 @@ export function ReactPlanner({
   axisTickSize = 6,
   axisSubTickSize = 3,
   brushHeight = 40,
-}: ReactPlannerProps) {
+  children,
+}: PropsWithChildren<ReactPlannerProps>) {
   usePlannerStore.setState({
     width,
     height,
@@ -40,5 +40,9 @@ export function ReactPlanner({
     brushHeight,
   });
 
-  return <div className="react-planner">{children}</div>;
+  return (
+    <div id="rp-1" className="react-planner" style={{ width, height }}>
+      {children}
+    </div>
+  );
 }

@@ -35,7 +35,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  background-color: #efefef;
+  border: 1px solid #000;
 }
 
 /* ============ tasks ============ */
@@ -43,6 +43,7 @@
   position: relative;
 }
 
+/* ============ time brush ============ */
 .rp-time-brush {
   position: relative;
 }

@@ -11,7 +11,6 @@ export const TimeBrush = () => {
   const viewEndDate = useScaleStore((state) => state.viewEndDate);
   const setViewRange = useScaleStore((state) => state.setViewRange);
   const extentScale = useScaleStore.getState().getExtentScale();
-  const brushColor = usePlannerStore((state) => state.brushColor);
 
   const onBrush = useCallback(
     (event: any) => {
@@ -42,11 +41,11 @@ export const TimeBrush = () => {
     svg.selectAll("*").remove();
 
     // Draw background
-    svg
-      .append("rect")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("fill", brushColor);
+    // svg
+    //   .append("rect")
+    //   .attr("width", width)
+    //   .attr("height", height)
+    //   .attr("fill", brushColor);
 
     // Create and call the brush
     const g = svg.append("g").call(brush);

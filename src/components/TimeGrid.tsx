@@ -10,6 +10,9 @@ export const TimeGrid = () => {
   const axisTickCount = usePlannerStore((state) => state.axisTickCount);
   const axisSubTickCount = usePlannerStore((state) => state.axisSubTickCount);
   const viewScale = useScaleStore.getState().getViewScale();
+  const brushHeight = usePlannerStore((state) => state.brushHeight);
+
+  const topOffset = axisHeight + brushHeight;
 
   useEffect(() => {
     if (!gridRef.current) return;
@@ -26,8 +29,8 @@ export const TimeGrid = () => {
       g.append("line")
         .attr("x1", x)
         .attr("x2", x)
-        .attr("y1", 0)
-        .attr("y2", height - axisHeight)
+        .attr("y1", topOffset)
+        .attr("y2", height - topOffset)
         .attr("stroke", "currentColor")
         .attr("stroke-opacity", 0.1);
     });
@@ -46,8 +49,8 @@ export const TimeGrid = () => {
           g.append("line")
             .attr("x1", subTickX)
             .attr("x2", subTickX)
-            .attr("y1", 0)
-            .attr("y2", height - axisHeight)
+            .attr("y1", topOffset)
+            .attr("y2", height - topOffset)
             .attr("stroke", "currentColor")
             .attr("stroke-opacity", 0.05);
         }
@@ -60,7 +63,7 @@ export const TimeGrid = () => {
       className="rp-time-grid"
       ref={gridRef}
       width={width}
-      height={height - axisHeight}
+      height={height - topOffset}
     />
   );
 };
