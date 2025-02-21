@@ -66,13 +66,11 @@ export const TimeBrush = () => {
   }, [width, height, sliderScale, viewStartDate, viewEndDate, onBrush]);
 
   return (
-    <div className="time-brush">
-      <svg
-        className="rp-time-brush"
-        ref={brushRef}
-        width={width}
-        height={height}
-      />
-    </div>
+    <svg
+      className="rp-time-brush"
+      ref={brushRef}
+      width={width}
+      height={height}
+    />
   );
 };

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useMemo } from "react";
-import { select, pointer } from "d3-selection";
+import { select } from "d3-selection";
 
 // types
 import { usePlannerStore, useScaleStore, useTaskStore } from "../store/store";

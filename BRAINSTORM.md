@@ -48,6 +48,20 @@
 
 ## Interactive
 
+## Interaction props (reference: reactflow)
+
+- tasksDraggable
+- tasksConnectable (dependencies)
+- tasksResizable
+- tasksSelectable
+- zoomOnScroll
+- panOnScroll
+- panOnScrollMode
+- zoomOnDoubleClick
+- panOnDrag
+- onPaneClick
+- onPaneScroll
+
 ### Scrollbar
 
 - Smooth horizontal scroll through large timelines
@@ -68,6 +82,11 @@
 - fast-forward
 - fast-backward
 - playback speed
+
+### Calculations
+
+- overlapping (e.g. task 1 end is after task 2 start in same channel)
+-
 
 ### Undo/redo controls
 

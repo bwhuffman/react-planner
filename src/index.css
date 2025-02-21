@@ -31,12 +31,19 @@
 }
 
 /* ============ planner ============ */
-.planner {
-  padding: var(--rp-spacing-2);
+.react-planner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #efefef;
 }
 
 /* ============ tasks ============ */
 .rp-tasks {
+  position: relative;
+}
+
+.rp-time-brush {
   position: relative;
 }
 
@@ -48,6 +55,10 @@
 /* ============ time grid ============ */
 .rp-time-grid {
   position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 

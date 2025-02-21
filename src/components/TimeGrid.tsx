@@ -26,7 +26,7 @@ export const TimeGrid = () => {
       g.append("line")
         .attr("x1", x)
         .attr("x2", x)
-        .attr("y1", axisHeight)
+        .attr("y1", 0)
         .attr("y2", height - axisHeight)
         .attr("stroke", "currentColor")
         .attr("stroke-opacity", 0.1);
@@ -45,7 +45,7 @@ export const TimeGrid = () => {
           g.append("line")
             .attr("x1", subTickX)
             .attr("x2", subTickX)
-            .attr("y1", axisHeight)
+            .attr("y1", 0)
             .attr("y2", height - axisHeight)
             .attr("stroke", "currentColor")
             .attr("stroke-opacity", 0.05);

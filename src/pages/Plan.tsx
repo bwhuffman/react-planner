@@ -1,9 +1,11 @@
 // components
-import { TimeGrid } from "./TimeGrid";
-import { TimeAxis } from "./TimeAxis";
-import { Tasks } from "./Tasks";
-import Inspector from "./Inspector";
-import { TimeBrush } from "./TimeBrush";
+import { ReactPlanner } from "../components/ReactPlanner";
+import { Tasks } from "../components/Tasks";
+import { TimeGrid } from "../components/TimeGrid";
+import { TimeAxis } from "../components/TimeAxis";
+import { TimeBrush } from "../components/TimeBrush";
+
+import Inspector from "../components/Inspector";
 
 // hooks
 import { useScaleStore, useTaskStore } from "../store/store";
@@ -16,7 +18,7 @@ import { utcDay } from "d3-time";
 const utcPlanStart = new Date(Date.UTC(2025, 2, 2, 0, 0, 0));
 const utcPlanEnd = utcDay.offset(utcPlanStart, 1);
 
-export default function Planner() {
+export default function Plan() {
   const tasks = useTaskStore((state) => state.tasks);
   const addTasks = useTaskStore((state) => state.addTasks);
   const deleteTasks = useTaskStore((state) => state.deleteTasks);
@@ -55,7 +57,7 @@ export default function Planner() {
   };
 
   return (
-    <div className="planner">
+    <div className="app" style={{ height: "100%" }}>
       <div className="header">
         <div className="header-title">
           <h1>Planner</h1>
@@ -73,13 +75,19 @@ export default function Planner() {
           <button onClick={handleDeleteTasks}>Reset</button>
         </div>
       </div>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <div style={{ position: "relative" }}>
+      <div
+        style={{
+          height: "100%",
+          display: "grid",
+          gridTemplateColumns: "4fr 1fr",
+        }}
+      >
+        <ReactPlanner>
           <TimeBrush />
-          <TimeGrid />
           <TimeAxis />
+          <TimeGrid />
           <Tasks />
-        </div>
+        </ReactPlanner>
         <Inspector />
       </div>
     </div>

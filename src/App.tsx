@@ -1,8 +1,8 @@
-import Planner from "./components/Planner";
 import "./App.css";
+import Plan from "./pages/Plan";
 
 function App() {
-  return <Planner />;
+  return <Plan />;
 }
 
 export default App;
