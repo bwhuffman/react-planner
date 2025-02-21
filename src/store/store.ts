@@ -58,6 +58,7 @@ interface PlannerStore {
   height: number;
   taskHeight: number;
   taskPadding: number;
+  brushHeight: number;
   axisHeight: number;
   axisTickCount: number;
   axisSubTickCount: number;
@@ -79,6 +80,8 @@ export const usePlannerStore = create<PlannerStore>((set) => ({
   // task
   taskHeight: 20,
   taskPadding: 4,
+  // brush
+  brushHeight: 40,
 }));
 
 interface ScaleStore {

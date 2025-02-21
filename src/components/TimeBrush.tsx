@@ -7,7 +7,7 @@ import { useScaleStore, usePlannerStore } from "../store/store";
 export const TimeBrush = () => {
   const brushRef = useRef(null);
   const width = usePlannerStore((state) => state.width);
-  const height = 40; // Height of the slider
+  const height = usePlannerStore((state) => state.brushHeight);
   const color = "#f0f0f0";
 
   const startDate = useScaleStore((state) => state.startDate);
