@@ -12,6 +12,7 @@ interface ReactPlannerProps {
   axisTickSize?: number;
   axisSubTickSize?: number;
   brushHeight?: number;
+  brushColor?: string;
 }
 
 export function ReactPlanner({
@@ -25,6 +26,7 @@ export function ReactPlanner({
   axisTickSize = 6,
   axisSubTickSize = 3,
   brushHeight = 40,
+  brushColor = "#f0f0f0",
   children,
 }: PropsWithChildren<ReactPlannerProps>) {
   usePlannerStore.setState({
@@ -38,6 +40,7 @@ export function ReactPlanner({
     axisTickSize,
     axisSubTickSize,
     brushHeight,
+    brushColor,
   });
 
   return (

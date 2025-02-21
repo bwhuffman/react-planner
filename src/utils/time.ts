@@ -59,3 +59,16 @@ export function getPositionFromTime(
 ): number {
   return scale(time);
 }
+
+// /**
+//  * Get a d3 transition
+//  * @param selection - The selection to transition
+//  * @param duration - The duration of the transition
+//  * @returns The transition
+//  */
+// export const getD3Transition = (
+//   selection: D3Selection<Element, unknown, null, undefined>,
+//   duration = 0
+// ) => {
+//   return selection.transition().duration(duration);
+// };

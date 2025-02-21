@@ -1,3 +1,56 @@
+# React Planner
+
+## Roadmap
+
+## Components & Layers
+
+### ReactPlanner
+
+Organizes all elements for planner, handles rendering, initial state, provider, and defaults
+
+- width `(number)`
+- height `(number)`
+- taskHeight `(number)`
+- taskPadding `(number)`
+- axisHeight `(number)`
+- axisTickCount `(number)`
+- axisSubTickCount `(number)`
+- axisTickSize `(number)`
+- axisSubTickSize `(number)`
+- brushHeight `(number)`
+- brushColor `(number)`
+
+### Background
+
+Add gridlines behind tasks based on tick and subtick settings
+
+-
+
+- Brush (time range selection)
+  - Allows user to select a time range
+  - Allows user to pan across timeline
+  - Allows user to zoom in and out
+- Axis (time units)
+  - Displays time units (e.g. day, week, month)
+  - Helps users navigate project timeline
+- Tasks (tasks plotted)
+  - Displays tasks
+  - Allows user to select tasks
+- Channels (task grouping)
+
+  - Displays task groups
+  - Allows user to select task groups
+
+- Tasks
+- Header
+- Footer
+- Zoom controls
+- Playback controls
+- Inspector
+- Context menu
+- Drag handle
+- Selection box
+
 # Components
 
 ## Core

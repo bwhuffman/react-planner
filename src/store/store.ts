@@ -86,21 +86,29 @@ export const usePlannerStore = create<PlannerStore>((set) => ({
 interface ScaleStore {
   extentStartDate: Date; // Full date range start date
   extentEndDate: Date; // Full date range end date
+  setExtentRange: (start: Date, end: Date) => void;
   getExtentScale: () => ScaleTime<number, number>;
   viewStartDate: Date; // Current view window start date
   viewEndDate: Date; // Current view window end date
-  getViewScale: () => ScaleTime<number, number>;
   setViewRange: (start: Date, end: Date) => void;
-  zoomToFit: () => void;
+  getViewScale: () => ScaleTime<number, number>;
   zoomToExtent: () => void;
+  zoomToFit: () => void;
   zoomOut: () => void;
   zoomIn: () => void;
+  zoomTo: (start: Date, end: Date) => void;
 }
 
 export const useScaleStore = create<ScaleStore>((set, get) => ({
   // Full date range
   extentStartDate: new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
   extentEndDate: new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
+  setExtentRange: (start: Date, end: Date) => {
+    set(() => ({
+      extentStartDate: start,
+      extentEndDate: end,
+    }));
+  },
   getExtentScale: () => {
     const width = usePlannerStore.getState().width;
     // const tickCount = usePlannerStore.getState().axisTickCount;
@@ -113,7 +121,12 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
   // Initial view is full range
   viewStartDate: new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
   viewEndDate: new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
-
+  setViewRange: (start: Date, end: Date) => {
+    set(() => ({
+      viewStartDate: start,
+      viewEndDate: end,
+    }));
+  },
   getViewScale: () => {
     const width = usePlannerStore.getState().width;
     // const tickCount = usePlannerStore.getState().axisTickCount;
@@ -121,13 +134,6 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
       .domain([get().viewStartDate, get().viewEndDate])
       .range([0, width]);
     //.nice(tickCount); // remove for smoother zooming
-  },
-  // set view range
-  setViewRange: (viewStartDate: Date, viewEndDate: Date) => {
-    set(() => ({
-      viewStartDate: viewStartDate,
-      viewEndDate: viewEndDate,
-    }));
   },
   zoomToExtent: () => {
     const { extentStartDate, extentEndDate } = get();
@@ -168,5 +174,8 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
     const newStartDate = new Date((midpointTime + startTime) / 2);
     const newEndDate = new Date((endTime + midpointTime) / 2);
     get().setViewRange(newStartDate, newEndDate);
+  },
+  zoomTo: (start: Date, end: Date) => {
+    get().setViewRange(start, end);
   },
 }));
