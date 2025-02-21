@@ -11,7 +11,7 @@ export const TimeAxis = () => {
   const axisSubTickCount = usePlannerStore((state) => state.axisSubTickCount);
   const axisTickSize = usePlannerStore((state) => state.axisTickSize);
   const axisSubTickSize = usePlannerStore((state) => state.axisSubTickSize);
-  const scale = useScaleStore((state) => state.scale);
+  const viewScale = useScaleStore((state) => state.viewScale);
 
   // update axis on width change
   useEffect(() => {
@@ -20,7 +20,7 @@ export const TimeAxis = () => {
     const svg = select(axisRef.current);
     svg.selectAll("*").remove();
 
-    const axis = axisTop(scale)
+    const axis = axisTop(viewScale)
       .ticks(axisTickCount)
       .tickSize(axisTickSize)
       .tickSizeOuter(0);
@@ -30,14 +30,15 @@ export const TimeAxis = () => {
     g.call(axis);
 
     // Add sub-ticks
-    const tickValues = scale.ticks(axisTickCount);
+    const tickValues = viewScale.ticks(axisTickCount);
     tickValues.forEach((tickValue, index) => {
-      const x = scale(tickValue);
+      const x = viewScale(tickValue);
 
       // Calculate the interval between major ticks
       const nextTickValue = tickValues[index + 1];
       if (nextTickValue) {
-        const interval = (scale(nextTickValue) - x) / (axisSubTickCount + 1);
+        const interval =
+          (viewScale(nextTickValue) - x) / (axisSubTickCount + 1);
 
         // Add sub-ticks between each major tick
         for (let i = 1; i <= axisSubTickCount; i++) {
@@ -53,7 +54,7 @@ export const TimeAxis = () => {
         }
       }
     });
-  }, [width, scale, axisTickCount, axisSubTickCount]);
+  }, [width, viewScale, axisTickCount, axisSubTickCount]);
 
   return (
     <svg

@@ -11,7 +11,7 @@ export function Tasks() {
   const tasks = useTaskStore((state) => state.tasks);
   const selectedTasks = useTaskStore((state) => state.selectedTasks);
   const setSelectedTasks = useTaskStore((state) => state.setSelectedTasks);
-  const scale = useScaleStore((state) => state.scale);
+  const viewScale = useScaleStore((state) => state.viewScale);
   const width = usePlannerStore((state) => state.width);
   const taskHeight = usePlannerStore((state) => state.taskHeight);
   const taskPadding = usePlannerStore((state) => state.taskPadding);
@@ -62,14 +62,17 @@ export function Tasks() {
           .select(`.channel-${channelId}`) // Select the specific channel group
           .append("g") // append task to channel
           .attr("class", (d) => `rp-task-group task-${d}`)
-          .attr("transform", `translate(${scale(new Date(task.start))}, 0)`); //translate(${scale(new Date(task.start))}, ${i * (TASK_HEIGHT + TASK_PADDING)})`
+          .attr(
+            "transform",
+            `translate(${viewScale(new Date(task.start))}, 0)`
+          ); //translate(${viewScale(new Date(task.start))}, ${i * (TASK_HEIGHT + TASK_PADDING)})`
 
         taskGroup
           .append("rect")
           .attr("class", "rp-task")
           .attr(
             "width",
-            scale(new Date(task.end)) - scale(new Date(task.start))
+            viewScale(new Date(task.end)) - viewScale(new Date(task.start))
           )
           .attr("height", taskHeight)
           .attr("fill", task.color || "black")
@@ -97,10 +100,10 @@ export function Tasks() {
     // Add mouse move listener to show current time
     tasksSvg.on("mousemove", (event) => {
       if (!tasksRef.current) return;
-      // const currentTime = getTimeFromPosition(event, scale, tasksRef.current);
+      // const currentTime = getTimeFromPosition(event, viewScale, tasksRef.current);
       // console.log("Hover time:", currentTime.toISOString());
     });
-  }, [width, tasks, selectedTasks, scale]);
+  }, [width, tasks, selectedTasks, viewScale]);
 
   return (
     <svg

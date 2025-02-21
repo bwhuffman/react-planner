@@ -82,7 +82,7 @@ export const usePlannerStore = create<PlannerStore>((set) => ({
 }));
 
 interface ScaleStore {
-  scale: ScaleTime<number, number>;
+  viewScale: ScaleTime<number, number>;
   extentStartDate: Date; // Full date range start date
   extentEndDate: Date; // Full date range end date
   viewStartDate: Date; // Current view window start date
@@ -104,7 +104,7 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
   viewEndDate: new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
 
   // scale
-  scale: scaleUtc()
+  viewScale: scaleUtc()
     .domain([
       new Date(Date.UTC(2025, 2, 2, 0, 0, 0)),
       new Date(Date.UTC(2025, 2, 3, 0, 0, 0)),
@@ -115,9 +115,11 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
   setViewRange: (viewStartDate: Date, viewEndDate: Date) => {
     const width = usePlannerStore.getState().width;
     set(() => ({
-      viewStartDate,
-      viewEndDate,
-      scale: scaleUtc().domain([viewStartDate, viewEndDate]).range([0, width]),
+      viewStartDate: viewStartDate,
+      viewEndDate: viewEndDate,
+      viewScale: scaleUtc()
+        .domain([viewStartDate, viewEndDate])
+        .range([0, width]),
     }));
   },
 

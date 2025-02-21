@@ -9,7 +9,7 @@ export const TimeGrid = () => {
   const axisHeight = usePlannerStore((state) => state.axisHeight);
   const axisTickCount = usePlannerStore((state) => state.axisTickCount);
   const axisSubTickCount = usePlannerStore((state) => state.axisSubTickCount);
-  const scale = useScaleStore((state) => state.scale);
+  const viewScale = useScaleStore((state) => state.viewScale);
 
   useEffect(() => {
     if (!gridRef.current) return;
@@ -20,9 +20,9 @@ export const TimeGrid = () => {
     const g = svg.append("g");
 
     // Draw major gridlines
-    const tickValues = scale.ticks(axisTickCount);
+    const tickValues = viewScale.ticks(axisTickCount);
     tickValues.forEach((tickValue) => {
-      const x = scale(tickValue);
+      const x = viewScale(tickValue);
       g.append("line")
         .attr("x1", x)
         .attr("x2", x)
@@ -34,11 +34,12 @@ export const TimeGrid = () => {
 
     // Draw minor gridlines
     tickValues.forEach((tickValue, index) => {
-      const x = scale(tickValue);
+      const x = viewScale(tickValue);
       const nextTickValue = tickValues[index + 1];
 
       if (nextTickValue) {
-        const interval = (scale(nextTickValue) - x) / (axisSubTickCount + 1);
+        const interval =
+          (viewScale(nextTickValue) - x) / (axisSubTickCount + 1);
 
         for (let i = 1; i <= axisSubTickCount; i++) {
           const subTickX = x + interval * i;
@@ -52,7 +53,7 @@ export const TimeGrid = () => {
         }
       }
     });
-  }, [scale, width, height, axisTickCount, axisSubTickCount]);
+  }, [viewScale, width, height, axisTickCount, axisSubTickCount]);
 
   return (
     <svg
