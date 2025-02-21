@@ -30,6 +30,8 @@ export default function Plan() {
   const zoomToExtent = useScaleStore((state) => state.zoomToExtent);
   const zoomOut = useScaleStore((state) => state.zoomOut);
   const zoomIn = useScaleStore((state) => state.zoomIn);
+  const panLeft = useScaleStore((state) => state.panLeft);
+  const panRight = useScaleStore((state) => state.panRight);
 
   const handleAddTask = () => {
     const timeRange = getRandomTimeInRange(utcPlanStart, utcPlanEnd);
@@ -81,6 +83,8 @@ export default function Plan() {
           <button onClick={zoomToExtent}>Zoom to Extent</button>
           <button onClick={zoomIn}>Zoom In</button>
           <button onClick={zoomOut}>Zoom Out</button>
+          <button onClick={() => panLeft(1000 * 60 * 60)}>Pan Left</button>
+          <button onClick={() => panRight(1000 * 60 * 60)}>Pan Right</button>
         </div>
       </div>
       <div

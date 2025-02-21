@@ -97,6 +97,8 @@ interface ScaleStore {
   zoomOut: () => void;
   zoomIn: () => void;
   zoomTo: (start: Date, end: Date) => void;
+  panLeft: (step: number) => void;
+  panRight: (step: number) => void;
 }
 
 export const useScaleStore = create<ScaleStore>((set, get) => ({
@@ -158,11 +160,11 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
       get();
     const viewStartTime = viewStartDate.getTime();
     const viewEndTime = viewEndDate.getTime();
-    const startTime = extentStartDate.getTime();
-    const endTime = extentEndDate.getTime();
+    const extentStartTime = extentStartDate.getTime();
+    const extentEndTime = extentEndDate.getTime();
 
-    const newStartDate = new Date((viewStartTime + startTime) / 2);
-    const newEndDate = new Date((viewEndTime + endTime) / 2);
+    const newStartDate = new Date((viewStartTime + extentStartTime) / 2);
+    const newEndDate = new Date((viewEndTime + extentEndTime) / 2);
     get().setViewRange(newStartDate, newEndDate);
   },
   zoomIn: () => {
@@ -177,5 +179,53 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
   },
   zoomTo: (start: Date, end: Date) => {
     get().setViewRange(start, end);
+  },
+  /**
+   * Pan left
+   * @param step milliseconds
+   */
+  panLeft: (step: number) => {
+    const { viewStartDate, viewEndDate, extentStartDate } = get();
+    const viewStartTime = viewStartDate.getTime();
+    const viewEndTime = viewEndDate.getTime();
+    const extentStartTime = extentStartDate.getTime();
+
+    // don't pan left outside the extent
+    if (extentStartTime > viewStartTime - step) {
+      const newStartDate = new Date(extentStartTime);
+      const newEndDate = new Date(
+        extentStartTime + (viewEndTime - viewStartTime)
+      );
+      get().setViewRange(newStartDate, newEndDate);
+      return;
+    }
+
+    const newStartDate = new Date(viewStartTime - step);
+    const newEndDate = new Date(viewEndTime - step);
+    get().setViewRange(newStartDate, newEndDate);
+  },
+  /**
+   * Pan left
+   * @param step milliseconds
+   */
+  panRight: (step: number) => {
+    const { viewStartDate, viewEndDate, extentEndDate } = get();
+    const viewStartTime = viewStartDate.getTime();
+    const viewEndTime = viewEndDate.getTime();
+    const extentEndTime = extentEndDate.getTime();
+
+    // don't pan right outside the extent
+    if (extentEndTime < viewEndTime + step) {
+      const newEndDate = new Date(extentEndTime);
+      const newStartDate = new Date(
+        extentEndTime - (viewEndTime - viewStartTime)
+      );
+      get().setViewRange(newStartDate, newEndDate);
+      return;
+    }
+
+    const newStartDate = new Date(viewStartTime + step);
+    const newEndDate = new Date(viewEndTime + step);
+    get().setViewRange(newStartDate, newEndDate);
   },
 }));
