@@ -1,6 +1,6 @@
 // components
 import { ReactPlanner } from "../components/ReactPlanner";
-import { Tasks } from "../components/Tasks";
+import { Regions } from "../components/Regions";
 import { Background } from "../components/Background";
 import { Axis } from "../components/Axis";
 import { Brush } from "../components/Brush";
@@ -8,7 +8,7 @@ import { Brush } from "../components/Brush";
 import Inspector from "../components/Inspector";
 
 // hooks
-import { useScaleStore, useTaskStore } from "../store/store";
+import { useScaleStore, useRegionStore } from "../store/store";
 
 // utils
 import { v4 as uuidv4 } from "uuid";
@@ -21,9 +21,9 @@ const utcPlanStart = new Date(Date.UTC(2025, 2, 2, 0, 0, 0));
 const utcPlanEnd = utcDay.offset(utcPlanStart, 1);
 
 export default function Plan() {
-  const tasks = useTaskStore((state) => state.tasks);
-  const addTasks = useTaskStore((state) => state.addTasks);
-  const deleteTasks = useTaskStore((state) => state.deleteTasks);
+  const regions = useRegionStore((state) => state.regions);
+  const addRegions = useRegionStore((state) => state.addRegions);
+  const deleteRegions = useRegionStore((state) => state.deleteRegions);
   const extentStartDate = useScaleStore((state) => state.extentStartDate);
   const extentEndDate = useScaleStore((state) => state.extentEndDate);
   const viewStartDate = useScaleStore((state) => state.viewStartDate);
@@ -35,16 +35,16 @@ export default function Plan() {
   const panLeft = useScaleStore((state) => state.panLeft);
   const panRight = useScaleStore((state) => state.panRight);
 
-  const handleAddTask = () => {
+  const handleAddRegion = () => {
     const timeRange = getRandomTimeInRange(utcPlanStart, utcPlanEnd);
     const timeRange2 = getRandomTimeInRange(utcPlanStart, utcPlanEnd);
     const channelId = uuidv4();
 
-    addTasks([
+    addRegions([
       {
         id: uuidv4(),
         channelId: channelId,
-        label: "New Task",
+        label: "New Region",
         start: timeRange.start,
         end: timeRange.end,
         color: getHexColor(),
@@ -52,7 +52,7 @@ export default function Plan() {
       {
         id: uuidv4(),
         channelId: channelId,
-        label: "New Task 2",
+        label: "New Region 2",
         start: timeRange2.start,
         end: timeRange2.end,
         color: getHexColor(),
@@ -60,8 +60,8 @@ export default function Plan() {
     ]);
   };
 
-  const handleDeleteTasks = () => {
-    deleteTasks([...tasks.map((task) => task.id)]);
+  const handleDeleteRegions = () => {
+    deleteRegions([...regions.map((region) => region.id)]);
   };
 
   return (
@@ -79,8 +79,8 @@ export default function Plan() {
           </div>
         </div>
         <div className="header-actions">
-          <button onClick={handleAddTask}>Add Task</button>
-          <button onClick={handleDeleteTasks}>Delete All Tasks</button>
+          <button onClick={handleAddRegion}>Add Region</button>
+          <button onClick={handleDeleteRegions}>Delete All Regions</button>
           <button onClick={zoomToFit}>Zoom to Fit</button>
           <button onClick={zoomToExtent}>Zoom to Extent</button>
           <button onClick={zoomIn}>Zoom In</button>
@@ -96,11 +96,11 @@ export default function Plan() {
           gridTemplateColumns: "4fr 1fr",
         }}
       >
-        <ReactPlanner taskHeight={40} taskPadding={4} axisHeight={48}>
+        <ReactPlanner regionHeight={40} regionPadding={4} axisHeight={48}>
           <Brush />
           <Axis />
           <Background variant={BackgroundVariant.SubTicks} color="#ccc" />
-          <Tasks />
+          <Regions />
         </ReactPlanner>
         <Inspector />
       </div>

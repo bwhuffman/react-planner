@@ -1,33 +1,37 @@
-import { useTaskStore } from "../store/store";
+import { useRegionStore } from "../store/store";
 
 export default function Inspector() {
-  const selectedTasks = useTaskStore((state) => state.selectedTasks);
-  const deleteTasks = useTaskStore((state) => state.deleteTasks);
-  const setSelectedTasks = useTaskStore((state) => state.setSelectedTasks);
+  const selectedRegions = useRegionStore((state) => state.selectedRegions);
+  const deleteRegions = useRegionStore((state) => state.deleteRegions);
+  const setSelectedRegions = useRegionStore(
+    (state) => state.setSelectedRegions
+  );
 
-  const handleDeleteTask = (id: string) => {
-    deleteTasks([id]);
-    setSelectedTasks([]);
+  const handleDeleteRegion = (id: string) => {
+    deleteRegions([id]);
+    setSelectedRegions([]);
   };
 
-  const handleDeselectTask = (id: string) => {
-    const tasks = selectedTasks.filter((task) => task.id !== id);
-    setSelectedTasks(tasks);
+  const handleDeselectRegion = (id: string) => {
+    const regions = selectedRegions.filter((region) => region.id !== id);
+    setSelectedRegions(regions);
   };
 
   return (
     <div className="inspector">
       <h2>Inspector</h2>
-      {selectedTasks.map((task) => (
-        <div key={task.id}>
+      {selectedRegions.map((region) => (
+        <div key={region.id}>
           <div style={{ paddingBottom: "16px" }}>
-            <h3>Task: {task.label}</h3>
-            <button onClick={() => handleDeleteTask(task.id)}>Delete</button>
-            <button onClick={() => handleDeselectTask(task.id)}>
+            <h3>Region: {region.label}</h3>
+            <button onClick={() => handleDeleteRegion(region.id)}>
+              Delete
+            </button>
+            <button onClick={() => handleDeselectRegion(region.id)}>
               Deselect
             </button>
           </div>
-          {Object.entries(task).map(([key, value]) => (
+          {Object.entries(region).map(([key, value]) => (
             <div
               key={key}
               style={{ display: "grid", gridTemplateColumns: "1fr 2fr" }}

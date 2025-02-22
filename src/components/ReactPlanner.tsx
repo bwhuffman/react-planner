@@ -4,8 +4,8 @@ import { usePlannerStore } from "../store/store";
 interface ReactPlannerProps {
   width?: number;
   height?: number;
-  taskHeight?: number;
-  taskPadding?: number;
+  regionHeight?: number;
+  regionPadding?: number;
   axisHeight?: number;
   axisTickCount?: number;
   axisSubTickCount?: number;
@@ -19,8 +19,8 @@ interface ReactPlannerProps {
 export function ReactPlanner({
   width = 960,
   height = 960,
-  taskHeight = 20,
-  taskPadding = 4,
+  regionHeight = 20,
+  regionPadding = 4,
   axisHeight = 48,
   axisTickCount = 5,
   axisSubTickCount = 3,
@@ -34,8 +34,8 @@ export function ReactPlanner({
   usePlannerStore.setState({
     width,
     height,
-    taskHeight,
-    taskPadding,
+    regionHeight,
+    regionPadding,
     axisHeight,
     axisTickCount,
     axisSubTickCount,

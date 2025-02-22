@@ -6,7 +6,7 @@
 //   rpId: "1",
 //   width: 0,
 //   height: 0,
-//   tasks: new Map(),
+//   regions: new Map(),
 //   edges: [],
 //   d3Zoom: null,
 //   d3Selection: null,

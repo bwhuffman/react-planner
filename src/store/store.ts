@@ -1,47 +1,49 @@
 import { create } from "zustand";
-import { Task } from "../types";
+import { Region } from "../types";
 import { ScaleTime } from "d3-scale";
 import { scaleUtc } from "d3-scale";
 import { isoFormat } from "d3-time-format";
 
-interface TaskStore {
-  tasks: Task[];
-  selectedTasks: Task[];
-  getTask: (id: string) => Task | undefined;
-  getTasks: () => Task[];
-  setSelectedTasks: (tasks: Task[]) => void;
-  addTasks: (newTasks: Task[]) => void;
-  updateTask: (id: string, updatedTask: Task) => void;
-  deleteTasks: (ids: string[]) => void;
-  setTasks: (tasks: Task[]) => void;
+interface RegionStore {
+  regions: Region[];
+  selectedRegions: Region[];
+  getRegion: (id: string) => Region | undefined;
+  getRegions: () => Region[];
+  setSelectedRegions: (regions: Region[]) => void;
+  addRegions: (newRegions: Region[]) => void;
+  updateRegion: (id: string, updatedRegion: Region) => void;
+  deleteRegions: (ids: string[]) => void;
+  setRegions: (regions: Region[]) => void;
 }
 
-export const useTaskStore = create<TaskStore>((set, get) => ({
-  tasks: [],
-  selectedTasks: [],
-  setSelectedTasks: (tasks: Task[]) => set({ selectedTasks: tasks }),
-  getTask: (id: string) => get().tasks.find((task) => task.id === id),
-  getTasks: () => get().tasks,
-  setTasks: (tasks: Task[]) => set({ tasks }),
-  addTasks: (newTasks: Task[]) =>
+export const useRegionStore = create<RegionStore>((set, get) => ({
+  regions: [],
+  selectedRegions: [],
+  setSelectedRegions: (regions: Region[]) => set({ selectedRegions: regions }),
+  getRegion: (id: string) => get().regions.find((region) => region.id === id),
+  getRegions: () => get().regions,
+  setRegions: (regions: Region[]) => set({ regions }),
+  addRegions: (newRegions: Region[]) =>
     set((state) => ({
-      tasks: [...state.tasks, ...newTasks],
+      regions: [...state.regions, ...newRegions],
     })),
-  updateTask: (id: string, updatedTask: Task) =>
+  updateRegion: (id: string, updatedRegion: Region) =>
     set((state) => ({
-      tasks: state.tasks.map((task) => (task.id === id ? updatedTask : task)),
+      regions: state.regions.map((region) =>
+        region.id === id ? updatedRegion : region
+      ),
     })),
-  deleteTasks: (ids: string[]) =>
+  deleteRegions: (ids: string[]) =>
     set((state) => ({
-      tasks: state.tasks.filter((task) => !ids.includes(task.id)),
+      regions: state.regions.filter((region) => !ids.includes(region.id)),
     })),
 }));
 
 interface PlannerStore {
   width: number;
   height: number;
-  taskHeight: number;
-  taskPadding: number;
+  regionHeight: number;
+  regionPadding: number;
   brushHeight: number;
   brushColor: string;
   axisHeight: number;
@@ -65,8 +67,8 @@ export const usePlannerStore = create<PlannerStore>((set) => ({
   axisTickSize: 8,
   axisSubTickSize: 3,
   axisTickPadding: 8,
-  taskHeight: 20,
-  taskPadding: 4,
+  regionHeight: 20,
+  regionPadding: 4,
   brushHeight: 40,
   brushColor: "#f0f0f0",
   timeFormat: isoFormat,
@@ -132,13 +134,15 @@ export const useScaleStore = create<ScaleStore>((set, get) => ({
     get().setViewRange(extentStartDate, extentEndDate);
   },
   zoomToFit: () => {
-    const tasks = useTaskStore.getState().tasks;
-    if (tasks.length === 0) return;
+    const regions = useRegionStore.getState().regions;
+    if (regions.length === 0) return;
 
     const earliestStart = Math.min(
-      ...tasks.map((task) => task.start.getTime())
+      ...regions.map((region) => region.start.getTime())
     );
-    const latestEnd = Math.max(...tasks.map((task) => task.end.getTime()));
+    const latestEnd = Math.max(
+      ...regions.map((region) => region.end.getTime())
+    );
 
     const newStartDate = new Date(earliestStart);
     const newEndDate = new Date(latestEnd);

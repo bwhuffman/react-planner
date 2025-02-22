@@ -38,8 +38,8 @@
   border: 1px solid #000;
 }
 
-/* ============ tasks ============ */
-.rp-tasks {
+/* ============ regions ============ */
+.rp-regions {
   position: relative;
 }
 
@@ -63,20 +63,20 @@
   pointer-events: none;
 }
 
-/* ============ task groups ============ */
-.rp-task-group {
+/* ============ region groups ============ */
+.rp-region-group {
   position: relative;
 }
 
-.rp-task {
+.rp-region {
   cursor: pointer;
 }
 
-.rp-task:hover {
+.rp-region:hover {
   opacity: 1;
 }
 
-.rp-task-label {
+.rp-region-label {
   fill: white;
   pointer-events: none;
 }

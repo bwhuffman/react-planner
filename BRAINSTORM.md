@@ -2,8 +2,8 @@
 
 ## TODO
 
-- [x] Display tasks
-- [x] Group tasks into channels
+- [x] Display regions
+- [x] Group regions into channels
 - [x] Display time axis
 - [x] Display ticks & subticks
 - [x] Control zoom
@@ -18,7 +18,29 @@
 <ReactPlanner>
   <Brush />
   <Axis />
-  <Tasks />
+  <Regions />
+  <Background />
+</ReactPlanner>
+```
+
+Future?
+
+```tsx title="ReactPlanner"
+<ReactPlanner regions={regions} channels={channels}>
+  <Brush />
+  <Axis />
+  <Channels>
+    <Channel>
+      <Region start={new Date()} end={new Date()} />
+      <Region start={new Date()} end={new Date()} />
+      <Region start={new Date()} end={new Date()} />
+    </Channel>
+    <Channel>
+      <Region start={new Date()} end={new Date()} />
+      <Region start={new Date()} end={new Date()} />
+      <Region start={new Date()} end={new Date()} />
+    </Channel>
+  </Channels>
   <Background />
 </ReactPlanner>
 ```
@@ -29,23 +51,23 @@ Organizes all elements for planner, handles rendering, initial state, provider, 
 
 **Props**
 
-| Property         | Type     | Description                                       |
-| ---------------- | -------- | ------------------------------------------------- |
-| width            | `number` | The width of the planner component.               |
-| height           | `number` | The height of the planner component.              |
-| taskHeight       | `number` | The height of each task displayed in the planner. |
-| taskPadding      | `number` | The padding between tasks in the planner.         |
-| axisHeight       | `number` | The height of the axis used for time units.       |
-| axisTickCount    | `number` | The number of major ticks on the axis.            |
-| axisSubTickCount | `number` | The number of minor ticks between major ticks.    |
-| axisTickSize     | `number` | The size of the major ticks on the axis.          |
-| axisSubTickSize  | `number` | The size of the minor ticks on the axis.          |
-| brushHeight      | `number` | The height of the brush used for zooming/panning. |
-| brushColor       | `string` | The color of the brush used in the planner.       |
+| Property         | Type     | Description                                         |
+| ---------------- | -------- | --------------------------------------------------- |
+| width            | `number` | The width of the planner component.                 |
+| height           | `number` | The height of the planner component.                |
+| regionHeight     | `number` | The height of each region displayed in the planner. |
+| regionPadding    | `number` | The padding between regions in the planner.         |
+| axisHeight       | `number` | The height of the axis used for time units.         |
+| axisTickCount    | `number` | The number of major ticks on the axis.              |
+| axisSubTickCount | `number` | The number of minor ticks between major ticks.      |
+| axisTickSize     | `number` | The size of the major ticks on the axis.            |
+| axisSubTickSize  | `number` | The size of the minor ticks on the axis.            |
+| brushHeight      | `number` | The height of the brush used for zooming/panning.   |
+| brushColor       | `string` | The color of the brush used in the planner.         |
 
 ### Background
 
-Adds gridlines behind tasks based on tick and subtick settings. Provides a structured background to help users visually align tasks with time units.
+Adds gridlines behind regions based on tick and subtick settings. Provides a structured background to help users visually align regions with time units.
 
 **Props**
 
@@ -73,21 +95,21 @@ Interact with the time scale with a brush (zooming/panning).
 
 ### usePlannerStore
 
-| Property         | Type                       | Description                                       |
-| ---------------- | -------------------------- | ------------------------------------------------- |
-| width            | `number`                   | The width of the planner component.               |
-| height           | `number`                   | The height of the planner component.              |
-| setWidth         | `(width: number) => void`  | Function to update the width of the planner.      |
-| setHeight        | `(height: number) => void` | Function to update the height of the planner.     |
-| axisHeight       | `number`                   | The height of the axis used for time units.       |
-| axisTickCount    | `number`                   | The number of major ticks on the axis.            |
-| axisSubTickCount | `number`                   | The number of minor ticks between major ticks.    |
-| axisTickSize     | `number`                   | The size of the major ticks on the axis.          |
-| axisSubTickSize  | `number`                   | The size of the minor ticks on the axis.          |
-| taskHeight       | `number`                   | The height of each task displayed in the planner. |
-| taskPadding      | `number`                   | The padding between tasks in the planner.         |
-| brushHeight      | `number`                   | The height of the brush used for zooming/panning. |
-| brushColor       | `string`                   | The color of the brush used in the planner.       |
+| Property         | Type                       | Description                                         |
+| ---------------- | -------------------------- | --------------------------------------------------- |
+| width            | `number`                   | The width of the planner component.                 |
+| height           | `number`                   | The height of the planner component.                |
+| setWidth         | `(width: number) => void`  | Function to update the width of the planner.        |
+| setHeight        | `(height: number) => void` | Function to update the height of the planner.       |
+| axisHeight       | `number`                   | The height of the axis used for time units.         |
+| axisTickCount    | `number`                   | The number of major ticks on the axis.              |
+| axisSubTickCount | `number`                   | The number of minor ticks between major ticks.      |
+| axisTickSize     | `number`                   | The size of the major ticks on the axis.            |
+| axisSubTickSize  | `number`                   | The size of the minor ticks on the axis.            |
+| regionHeight     | `number`                   | The height of each region displayed in the planner. |
+| regionPadding    | `number`                   | The padding between regions in the planner.         |
+| brushHeight      | `number`                   | The height of the brush used for zooming/panning.   |
+| brushColor       | `string`                   | The color of the brush used in the planner.         |
 
 ### useScaleStore
 
@@ -109,19 +131,19 @@ Interact with the time scale with a brush (zooming/panning).
 | panLeft         | `(step: number) => void`           | Function to pan left on the view of the planner.     |
 | panRight        | `(step: number) => void`           | Function to pan right on the view of the planner.    |
 
-### useTaskStore
+### useRegionStore
 
-| Property         | Type                                      | Description                         |
-| ---------------- | ----------------------------------------- | ----------------------------------- |
-| tasks            | `Task[]`                                  | The tasks in the planner.           |
-| selectedTasks    | `Task[]`                                  | The selected tasks in the planner.  |
-| getTask          | `(id: string) => Task \| undefined`       | Function to get a task by id.       |
-| getTasks         | `() => Task[]`                            | Function to get all tasks.          |
-| setSelectedTasks | `(tasks: Task[]) => void`                 | Function to set the selected tasks. |
-| addTasks         | `(newTasks: Task[]) => void`              | Function to add new tasks.          |
-| updateTask       | `(id: string, updatedTask: Task) => void` | Function to update a task.          |
-| deleteTasks      | `(ids: string[]) => void`                 | Function to delete tasks.           |
-| setTasks         | `(tasks: Task[]) => void`                 | Function to set the tasks.          |
+| Property           | Type                                          | Description                           |
+| ------------------ | --------------------------------------------- | ------------------------------------- |
+| regions            | `Region[]`                                    | The regions in the planner.           |
+| selectedRegions    | `Region[]`                                    | The selected regions in the planner.  |
+| getRegion          | `(id: string) => Region \| undefined`         | Function to get a region by id.       |
+| getRegions         | `() => Region[]`                              | Function to get all regions.          |
+| setSelectedRegions | `(regions: Region[]) => void`                 | Function to set the selected regions. |
+| addRegions         | `(newRegions: Region[]) => void`              | Function to add new regions.          |
+| updateRegion       | `(id: string, updatedRegion: Region) => void` | Function to update a region.          |
+| deleteRegions      | `(ids: string[]) => void`                     | Function to delete regions.           |
+| setRegions         | `(regions: Region[]) => void`                 | Function to set the regions.          |
 
 ### DependencyLine
 
@@ -134,22 +156,22 @@ Interact with the time scale with a brush (zooming/panning).
 
 ### Tooltip
 
-- hover information for tasks
+- hover information for regions
 
 ### Drag Handle
 
-- Resize tasks in-line on canvas
+- Resize regions in-line on canvas
 
 ### Selection Box
 
-- Allow user to select multiple tasks for bulk actions
+- Allow user to select multiple regions for bulk actions
 
 ## Version 2
 
 Interace Elements
 
-- [ ] Task dragging
-- [ ] Task resizing
+- [ ] Region dragging
+- [ ] Region resizing
 - [ ] Channel groups
 - [ ] Custom region components
 - [ ] Dependency lines
@@ -167,15 +189,15 @@ Canvas interactions
 - [ ] pan on drag
 - [ ] on pane click
 - [ ] on pane scroll
-- [ ] tasks draggable
-- [ ] tasks resizable
-- [ ] tasks selectable
-- [ ] tasks connectable (dependencies)
+- [ ] regions draggable
+- [ ] regions resizable
+- [ ] regions selectable
+- [ ] regions connectable (dependencies)
 
 Context Menus
 
 - [ ] Canvas context menu
-- [ ] Task context menu
+- [ ] Region context menu
 - [ ] Dependency context menu
 
 Hooks (extension)
@@ -184,8 +206,8 @@ Hooks (extension)
 
 Methods
 
-- [ ] Detect task overlaps (same channel)
-- [ ] Detect task dependencies (one task ends before another starts)
+- [ ] Detect region overlaps (same channel)
+- [ ] Detect region dependencies (one region ends before another starts)
 
 Animation (extension)
 

@@ -1,4 +1,4 @@
-export type Task<T = any> = {
+export type Region<T = any> = {
   id: string;
   channelId: string;
   label: string;
