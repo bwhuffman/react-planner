@@ -1,78 +1,126 @@
-# React Planner
+# React Planner (v1)
 
-## Roadmap
+## TODO
+
+- [x] Display tasks
+- [x] Group tasks into channels
+- [x] Display time axis
+- [x] Display ticks & subticks
+- [x] Control zoom
+- [x] Control pan
+- [x] Brush time ranges
+- [ ] Dynamic width/height
 
 ## Components & Layers
 
+```tsx title="ReactPlanner"
+<ReactPlanner>
+  <Brush />
+  <Axis />
+  <Tasks />
+  <Background />
+</ReactPlanner>
+```
+
 ### ReactPlanner
 
-Organizes all elements for planner, handles rendering, initial state, provider, and defaults
+Organizes all elements for planner, handles rendering, initial state, provider, and defaults.
 
-- width `(number)`
-- height `(number)`
-- taskHeight `(number)`
-- taskPadding `(number)`
-- axisHeight `(number)`
-- axisTickCount `(number)`
-- axisSubTickCount `(number)`
-- axisTickSize `(number)`
-- axisSubTickSize `(number)`
-- brushHeight `(number)`
-- brushColor `(number)`
+**Props**
+
+| Property         | Type     | Description                                       |
+| ---------------- | -------- | ------------------------------------------------- |
+| width            | `number` | The width of the planner component.               |
+| height           | `number` | The height of the planner component.              |
+| taskHeight       | `number` | The height of each task displayed in the planner. |
+| taskPadding      | `number` | The padding between tasks in the planner.         |
+| axisHeight       | `number` | The height of the axis used for time units.       |
+| axisTickCount    | `number` | The number of major ticks on the axis.            |
+| axisSubTickCount | `number` | The number of minor ticks between major ticks.    |
+| axisTickSize     | `number` | The size of the major ticks on the axis.          |
+| axisSubTickSize  | `number` | The size of the minor ticks on the axis.          |
+| brushHeight      | `number` | The height of the brush used for zooming/panning. |
+| brushColor       | `string` | The color of the brush used in the planner.       |
 
 ### Background
 
-Add gridlines behind tasks based on tick and subtick settings
+Adds gridlines behind tasks based on tick and subtick settings. Provides a structured background to help users visually align tasks with time units.
 
--
+**Props**
 
-- Brush (time range selection)
-  - Allows user to select a time range
-  - Allows user to pan across timeline
-  - Allows user to zoom in and out
-- Axis (time units)
-  - Displays time units (e.g. day, week, month)
-  - Helps users navigate project timeline
-- Tasks (tasks plotted)
-  - Displays tasks
-  - Allows user to select tasks
-- Channels (task grouping)
+| Property | Type                                    | Description                     |
+| -------- | --------------------------------------- | ------------------------------- |
+| variant  | `'ticks'   \| 'subticks' \| 'channels'` | The variant type for gridlines. |
+| color    | `(string)`                              | The color of the gridlines.     |
 
-  - Displays task groups
-  - Allows user to select task groups
+### Axis
 
-- Tasks
-- Header
-- Footer
-- Zoom controls
-- Playback controls
-- Inspector
-- Context menu
-- Drag handle
-- Selection box
+View time units from time scale.
 
-# Components
+**Props**
 
-## Core
+| Property | Type                    | Description                     |
+| -------- | ----------------------- | ------------------------------- |
+| variant  | `'ticks' \| 'subticks'` | The variant type for gridlines. |
+| color    | `(string)`              | The color of the gridlines.     |
 
-### Chart
+### Brush
 
-- Organizes all elements
-- Handles rendering timeline, tasks, grid
+Interact with the time scale with a brush (zooming/panning).
 
-### Grid
+## Hooks
 
-- provides strucutred background aligning with time units
-- Help users visually align tasks with respective timeframes
+### usePlannerStore
 
-### Header
+| Property         | Type                       | Description                                       |
+| ---------------- | -------------------------- | ------------------------------------------------- |
+| width            | `number`                   | The width of the planner component.               |
+| height           | `number`                   | The height of the planner component.              |
+| setWidth         | `(width: number) => void`  | Function to update the width of the planner.      |
+| setHeight        | `(height: number) => void` | Function to update the height of the planner.     |
+| axisHeight       | `number`                   | The height of the axis used for time units.       |
+| axisTickCount    | `number`                   | The number of major ticks on the axis.            |
+| axisSubTickCount | `number`                   | The number of minor ticks between major ticks.    |
+| axisTickSize     | `number`                   | The size of the major ticks on the axis.          |
+| axisSubTickSize  | `number`                   | The size of the minor ticks on the axis.          |
+| taskHeight       | `number`                   | The height of each task displayed in the planner. |
+| taskPadding      | `number`                   | The padding between tasks in the planner.         |
+| brushHeight      | `number`                   | The height of the brush used for zooming/panning. |
+| brushColor       | `string`                   | The color of the brush used in the planner.       |
 
-- Displays time units (e.g. day, week, month)
-- Helps users navigate project timeline
+### useScaleStore
 
-### Task
+| Property        | Type                               | Description                                          |
+| --------------- | ---------------------------------- | ---------------------------------------------------- |
+| extentStartDate | `Date`                             | The start date of the extent of the planner.         |
+| extentEndDate   | `Date`                             | The end date of the extent of the planner.           |
+| setExtentRange  | `(start: Date, end: Date) => void` | Function to update the extent of the planner.        |
+| getExtentScale  | `() => ScaleTime<number, number>`  | The scale of the extent of the planner.              |
+| viewStartDate   | `Date`                             | The start date of the view of the planner.           |
+| viewEndDate     | `Date`                             | The end date of the view of the planner.             |
+| setViewRange    | `(start: Date, end: Date) => void` | Function to update the view of the planner.          |
+| getViewScale    | `() => ScaleTime<number, number>`  | The scale of the view of the planner.                |
+| zoomToExtent    | `() => void`                       | Function to zoom to the extent of the planner.       |
+| zoomToFit       | `() => void`                       | Function to zoom to fit the view of the planner.     |
+| zoomOut         | `() => void`                       | Function to zoom out of the view of the planner.     |
+| zoomIn          | `() => void`                       | Function to zoom in on the view of the planner.      |
+| zoomTo          | `(start: Date, end: Date) => void` | Function to zoom to a specific range of the planner. |
+| panLeft         | `(step: number) => void`           | Function to pan left on the view of the planner.     |
+| panRight        | `(step: number) => void`           | Function to pan right on the view of the planner.    |
 
-- Represents individual task as a bar spanning start to end.
+### useTaskStore
+
+| Property         | Type                                      | Description                         |
+| ---------------- | ----------------------------------------- | ----------------------------------- |
+| tasks            | `Task[]`                                  | The tasks in the planner.           |
+| selectedTasks    | `Task[]`                                  | The selected tasks in the planner.  |
+| getTask          | `(id: string) => Task \| undefined`       | Function to get a task by id.       |
+| getTasks         | `() => Task[]`                            | Function to get all tasks.          |
+| setSelectedTasks | `(tasks: Task[]) => void`                 | Function to set the selected tasks. |
+| addTasks         | `(newTasks: Task[]) => void`              | Function to add new tasks.          |
+| updateTask       | `(id: string, updatedTask: Task) => void` | Function to update a task.          |
+| deleteTasks      | `(ids: string[]) => void`                 | Function to delete tasks.           |
+| setTasks         | `(tasks: Task[]) => void`                 | Function to set the tasks.          |
 
 ### DependencyLine
 
@@ -87,10 +135,6 @@ Add gridlines behind tasks based on tick and subtick settings
 
 - hover information for tasks
 
-### Context Menu
-
-- Right click options on tasks
-
 ### Drag Handle
 
 - Resize tasks in-line on canvas
@@ -99,53 +143,59 @@ Add gridlines behind tasks based on tick and subtick settings
 
 - Allow user to select multiple tasks for bulk actions
 
-## Interactive
+## Version 2
 
-## Interaction props (reference: reactflow)
+Interace Elements
 
-- tasksDraggable
-- tasksConnectable (dependencies)
-- tasksResizable
-- tasksSelectable
-- zoomOnScroll
-- panOnScroll
-- panOnScrollMode
-- zoomOnDoubleClick
-- panOnDrag
-- onPaneClick
-- onPaneScroll
+- [ ] Task dragging
+- [ ] Task resizing
+- [ ] Channel groups
+- [ ] Custom region components
+- [ ] Dependency lines
+- [ ] Minimap brush
+- [ ] Markers (time markers)
+- [ ] Grid snapping (and/or markers)
 
-### Scrollbar
+Canvas interactions
 
-- Smooth horizontal scroll through large timelines
+- [ ] Multi-select regions
+- [ ] zoom on scroll
+- [ ] pan on scroll
+- [ ] zoom on double click
+- [ ] pan on drag
+- [ ] on pane click
+- [ ] on pane scroll
+- [ ] tasks draggable
+- [ ] tasks resizable
+- [ ] tasks selectable
+- [ ] tasks connectable (dependencies)
 
-### Zoom controls
+Context Menus
 
-- zoom in
-- zoom out
-- fit to view (e.g. task, all tasks)
+- [ ] Canvas context menu
+- [ ] Task context menu
+- [ ] Dependency context menu
 
-### Playback Controls
+Hooks (extension)
 
-- start
-- stop
-- pause
-- step-forward
-- step-backward
-- fast-forward
-- fast-backward
-- playback speed
+- [ ] Undo/redo
 
-### Calculations
+Methods
 
-- overlapping (e.g. task 1 end is after task 2 start in same channel)
--
+- [ ] Detect task overlaps (same channel)
+- [ ] Detect task dependencies (one task ends before another starts)
 
-### Undo/redo controls
+Animation (extension)
 
-- Undo or redo modifications
-
-## Actions
-
-- Import (e.g. JSON, CSV)
-- Export (e.g. JSON, image)
+- [ ] Playback controls hook
+  - [ ] start
+  - [ ] stop
+  - [ ] pause
+  - [ ] restart
+  - [ ] step-forward
+  - [ ] step-backward
+  - [ ] fast-forward
+  - [ ] fast-backward
+  - [ ] playback speed
+- [ ] Repeat/loop hooks
+  - [ ] repeat

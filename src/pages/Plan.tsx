@@ -15,6 +15,8 @@ import { v4 as uuidv4 } from "uuid";
 import { getRandomTimeInRange, getHexColor } from "../utils";
 import { utcDay } from "d3-time";
 
+import { BackgroundVariant } from "../types";
+
 const utcPlanStart = new Date(Date.UTC(2025, 2, 2, 0, 0, 0));
 const utcPlanEnd = utcDay.offset(utcPlanStart, 1);
 
@@ -97,7 +99,7 @@ export default function Plan() {
         <ReactPlanner taskHeight={40} taskPadding={4} axisHeight={48}>
           <Brush />
           <Axis />
-          <Background />
+          <Background variant={BackgroundVariant.SubTicks} color="#ccc" />
           <Tasks />
         </ReactPlanner>
         <Inspector />

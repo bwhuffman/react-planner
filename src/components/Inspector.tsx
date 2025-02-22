@@ -30,7 +30,7 @@ export default function Inspector() {
           {Object.entries(task).map(([key, value]) => (
             <div
               key={key}
-              style={{ display: "grid", gridTemplateColumns: "1fr 1fr" }}
+              style={{ display: "grid", gridTemplateColumns: "1fr 2fr" }}
             >
               <strong>{key}:</strong> {String(value)}
             </div>
