@@ -9,7 +9,8 @@
 - [x] Control zoom
 - [x] Control pan
 - [x] Brush time ranges
-- [ ] Dynamic width/height
+- [x] Time formatting
+- [ ] Dynamic width/height (responsive)
 
 ## Components & Layers
 
@@ -155,6 +156,7 @@ Interace Elements
 - [ ] Minimap brush
 - [ ] Markers (time markers)
 - [ ] Grid snapping (and/or markers)
+- [ ] Subtick labels
 
 Canvas interactions
 
@@ -199,3 +201,51 @@ Animation (extension)
   - [ ] playback speed
 - [ ] Repeat/loop hooks
   - [ ] repeat
+
+```javascript
+// SUBTICK LABELS FOR LATER
+const subTickValues = calculateSubTicks(tickValues);
+
+const subTicks = g
+  .selectAll<SVGGElement, { x: number; subtickIndex: number }>(".subtick")
+  .data(subTickValues);
+
+// Create new subtick groups
+const subTickGroups = subTicks
+  .enter()
+  .append("g")
+  .attr("class", "subtick")
+  .merge(subTicks)
+  .attr("transform", (d) => `translate(${d.x}, 0)`);
+
+// Select and update subtick ines within groups
+const subtickLines = subTickGroups
+  .selectAll<SVGLineElement, { x: number; subtickIndex: number }>("line")
+  .data((d) => [d]); // Bind single data point to ensure one line per group
+
+subtickLines
+  .enter()
+  .append("line")
+  .merge(subtickLines)
+  .attr("y2", -axisSubTickSize)
+  .attr("stroke", "currentColor")
+  .attr("stroke-opacity", 0.5);
+
+// Select and update subtick text within groups
+const subtickLabels = subTickGroups
+  .selectAll<SVGTextElement, { x: number; subtickIndex: number }>("text")
+  .data((d) => [d]); // Bind single data point to ensure one text per group
+
+subtickLabels
+  .enter()
+  .append("text")
+  .merge(subtickLabels)
+  .attr("y", -axisSubTickSize)
+  .attr("text-anchor", "middle")
+  .attr("fill", "currentColor")
+  .text((d) => d.subtickIndex);
+
+subtickLines.exit().remove(); // Remove old lines
+subtickLabels.exit().remove(); // Remove old texts
+subTickGroups.exit().remove(); // Remove old subticks
+```

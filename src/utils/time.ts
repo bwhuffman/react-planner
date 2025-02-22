@@ -1,5 +1,5 @@
 import { ScaleTime } from "d3-scale";
-import { pointer } from "d3-selection";
+import { Selection as D3Selection, pointer } from "d3-selection";
 
 /**
  * Get a random time in a range
@@ -60,15 +60,15 @@ export function getPositionFromTime(
   return scale(time);
 }
 
-// /**
-//  * Get a d3 transition
-//  * @param selection - The selection to transition
-//  * @param duration - The duration of the transition
-//  * @returns The transition
-//  */
-// export const getD3Transition = (
-//   selection: D3Selection<Element, unknown, null, undefined>,
-//   duration = 0
-// ) => {
-//   return selection.transition().duration(duration);
-// };
+/**
+ * D3 selection wrapper (from ReactFlow: )
+ * @param selection - The selection to transition
+ * @param duration - The duration of the transition
+ * @returns The transition
+ */
+export const getD3Transition = (
+  selection: D3Selection<Element, unknown, null, undefined>,
+  duration = 0
+) => {
+  return selection.transition().duration(duration);
+};

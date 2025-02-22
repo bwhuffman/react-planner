@@ -11,6 +11,7 @@ interface ReactPlannerProps {
   axisSubTickCount?: number;
   axisTickSize?: number;
   axisSubTickSize?: number;
+  axisTickPadding?: number;
   brushHeight?: number;
   brushColor?: string;
 }
@@ -21,10 +22,11 @@ export function ReactPlanner({
   taskHeight = 20,
   taskPadding = 4,
   axisHeight = 48,
-  axisTickCount = 8,
-  axisSubTickCount = 4,
-  axisTickSize = 6,
+  axisTickCount = 5,
+  axisSubTickCount = 3,
+  axisTickSize = 8,
   axisSubTickSize = 3,
+  axisTickPadding = 8,
   brushHeight = 40,
   brushColor = "#f0f0f0",
   children,
@@ -39,6 +41,7 @@ export function ReactPlanner({
     axisSubTickCount,
     axisTickSize,
     axisSubTickSize,
+    axisTickPadding,
     brushHeight,
     brushColor,
   });

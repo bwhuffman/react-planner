@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { Task } from "../types";
 import { ScaleTime } from "d3-scale";
 import { scaleUtc } from "d3-scale";
+import { isoFormat } from "d3-time-format";
 
 interface TaskStore {
   tasks: Task[];
@@ -48,6 +49,9 @@ interface PlannerStore {
   axisSubTickCount: number;
   axisTickSize: number;
   axisSubTickSize: number;
+  axisTickPadding: number;
+  timeFormat: (d: Date) => string;
+  setTimeFormat: (timeFormat: (d: Date) => string) => void;
 }
 
 export const usePlannerStore = create<PlannerStore>((set) => ({
@@ -58,12 +62,15 @@ export const usePlannerStore = create<PlannerStore>((set) => ({
   axisHeight: 48,
   axisTickCount: 8,
   axisSubTickCount: 4,
-  axisTickSize: 6,
+  axisTickSize: 8,
   axisSubTickSize: 3,
+  axisTickPadding: 8,
   taskHeight: 20,
   taskPadding: 4,
   brushHeight: 40,
   brushColor: "#f0f0f0",
+  timeFormat: isoFormat,
+  setTimeFormat: (timeFormat: (d: Date) => string) => set({ timeFormat }),
 }));
 
 interface ScaleStore {
