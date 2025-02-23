@@ -1,6 +1,6 @@
 // components
 import { ReactPlanner } from "../components/ReactPlanner";
-import { Regions } from "../components/Regions";
+import { Channels } from "../components/Channels";
 import { Background } from "../components/Background";
 import { Axis } from "../components/Axis";
 import { Brush } from "../components/Brush";
@@ -100,7 +100,7 @@ export default function Plan() {
           <Brush />
           <Axis />
           <Background variant={BackgroundVariant.SubTicks} color="#ccc" />
-          <Regions />
+          <Channels />
         </ReactPlanner>
         <Inspector />
       </div>

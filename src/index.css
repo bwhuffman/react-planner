@@ -38,9 +38,15 @@
   border: 1px solid #000;
 }
 
-/* ============ regions ============ */
-.rp-regions {
+/* ============ channels ============ */
+.rp-channels {
   position: relative;
+}
+
+/* ============ channel ============ */
+.rp-channel {
+  position: relative;
+  /* border-bottom: 1px solid #c1d1c1; */
 }
 
 /* ============ time brush ============ */

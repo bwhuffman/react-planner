@@ -91,7 +91,7 @@ View time units from time scale.
 
 Interact with the time scale with a brush (zooming/panning).
 
-## Hooks
+## Stores
 
 ### usePlannerStore
 
@@ -145,26 +145,12 @@ Interact with the time scale with a brush (zooming/panning).
 | deleteRegions      | `(ids: string[]) => void`                     | Function to delete regions.           |
 | setRegions         | `(regions: Region[]) => void`                 | Function to set the regions.          |
 
-### DependencyLine
+## Hooks (TBD)
 
-- TBD
-
-### Marker
-
-- Creates vertical marker (e.g. at today's date)
-- Helps quickly identify important dates
-
-### Tooltip
-
-- hover information for regions
-
-### Drag Handle
-
-- Resize regions in-line on canvas
-
-### Selection Box
-
-- Allow user to select multiple regions for bulk actions
+- `usePlanner`
+- `useScale`
+- `useChannel`
+- `useRegion`
 
 ## Version 2
 

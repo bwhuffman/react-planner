@@ -9,3 +9,9 @@ export type Region<T = any> = {
   selected?: boolean;
   data?: T;
 };
+
+export type Channel<T = any> = {
+  id: string;
+  label: string;
+  data?: T;
+};
