@@ -1,5 +1,6 @@
 import { ScaleTime } from "d3-scale";
 import { Selection as D3Selection, pointer } from "d3-selection";
+import { MouseEvent } from "react";
 
 /**
  * Get a random time in a range
@@ -39,9 +40,10 @@ export const getRandomTimeInRange = (
 export function getTimeFromPosition(
   event: MouseEvent,
   scale: ScaleTime<number, number>,
-  svgElement: SVGSVGElement
+  element: HTMLElement
 ): Date {
-  const [x] = pointer(event, svgElement);
+  const rect = element.getBoundingClientRect();
+  const x = event.clientX - rect.left;
   return scale.invert(x);
 }
 

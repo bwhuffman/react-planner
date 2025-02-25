@@ -4,7 +4,6 @@ import { select } from "d3-selection";
 // types
 import { usePlannerStore, useScaleStore, useRegionStore } from "../store/store";
 import { Region } from "../types";
-import { getTimeFromPosition } from "../utils";
 
 interface ChannelProps {
   channelId: string;
@@ -57,6 +56,7 @@ export function Channel({ channelId, regions }: ChannelProps) {
       .attr("stroke-width", 2)
       .on("click", (event, d) => {
         event.preventDefault();
+        console.log("REGION CLICKED");
         setSelectedRegions([d]);
       });
 
@@ -66,13 +66,6 @@ export function Channel({ channelId, regions }: ChannelProps) {
       .attr("y", regionHeight / 2 + 5) // Center the text vertically in the rectangle
       .attr("class", "rp-region-label")
       .text((d) => d.label); // Optional: set text color
-
-    // Add mouse move listener to show current time
-    channelSvg.on("mousemove", (event) => {
-      if (!channelRef.current) return;
-      // const currentTime = getTimeFromPosition(event, viewScale, regionsRef.current);
-      // console.log("Hover time:", currentTime.toISOString());
-    });
   }, [width, regions, selectedRegions, viewScale]);
 
   return (

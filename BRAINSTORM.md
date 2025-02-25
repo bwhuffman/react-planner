@@ -26,10 +26,10 @@
 Future?
 
 ```tsx title="ReactPlanner"
-<ReactPlanner regions={regions} channels={channels}>
+<ReactPlannerProvider regions={regions} channels={channels}>
   <Brush />
   <Axis />
-  <Channels>
+  <Plan>
     <Channel>
       <Region start={new Date()} end={new Date()} />
       <Region start={new Date()} end={new Date()} />
@@ -40,9 +40,9 @@ Future?
       <Region start={new Date()} end={new Date()} />
       <Region start={new Date()} end={new Date()} />
     </Channel>
-  </Channels>
+  </Plan>
   <Background />
-</ReactPlanner>
+</ReactPlannerProvider>
 ```
 
 ### ReactPlanner
@@ -165,6 +165,13 @@ Interace Elements
 - [ ] Markers (time markers)
 - [ ] Grid snapping (and/or markers)
 - [ ] Subtick labels
+
+Channel controls
+
+- [ ] Hide regions by channel
+- [ ] Select regions by channel
+- [ ] Disable select regions by channel
+- [ ] Only show regions in channel
 
 Canvas interactions
 

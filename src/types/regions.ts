@@ -12,6 +12,13 @@ export type Region<T = any> = {
 
 export type Channel<T = any> = {
   id: string;
-  label: string;
+  label?: string;
+  hidden?: boolean;
+  selected?: boolean;
   data?: T;
+};
+
+// temporary type for grouping regions by channel
+export type Channels = {
+  [key: string]: Region[];
 };

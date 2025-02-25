@@ -1,8 +1,60 @@
 import { create } from "zustand";
-import { Region } from "../types";
+import { Region, Rect, SelectionBox, Box, Channel, Channels } from "../types";
 import { ScaleTime } from "d3-scale";
 import { scaleUtc } from "d3-scale";
 import { isoFormat } from "d3-time-format";
+
+interface PlannerStore {
+  // planner information
+  width: number;
+  height: number;
+  // region information
+  regionHeight: number;
+  regionPadding: number;
+  // brush information
+  brushHeight: number;
+  brushColor: string;
+  // axis information
+  axisHeight: number;
+  axisTickCount: number;
+  axisSubTickCount: number;
+  axisTickSize: number;
+  axisSubTickSize: number;
+  axisTickPadding: number;
+  // time formatting
+  timeFormat: (d: Date) => string;
+  setTimeFormat: (timeFormat: (d: Date) => string) => void;
+  // selection information
+  userIsSelecting: boolean;
+  userSelectionBox: Box | null;
+  setUserSelection: (active: boolean, box: Box | null) => void;
+  // interaction design patterns
+  selectionOnDrag: boolean;
+}
+
+export const usePlannerStore = create<PlannerStore>((set) => ({
+  width: 960,
+  height: 960,
+  setWidth: (width: number) => set({ width }),
+  setHeight: (height: number) => set({ height }),
+  axisHeight: 48,
+  axisTickCount: 8,
+  axisSubTickCount: 4,
+  axisTickSize: 8,
+  axisSubTickSize: 3,
+  axisTickPadding: 8,
+  regionHeight: 20,
+  regionPadding: 4,
+  brushHeight: 40,
+  brushColor: "#f0f0f0",
+  timeFormat: isoFormat,
+  setTimeFormat: (timeFormat: (d: Date) => string) => set({ timeFormat }),
+  userIsSelecting: false,
+  userSelectionBox: null,
+  setUserSelection: (active: boolean, box: Box | null) =>
+    set({ userIsSelecting: active, userSelectionBox: box }),
+  selectionOnDrag: true,
+}));
 
 interface RegionStore {
   regions: Region[];
@@ -14,6 +66,8 @@ interface RegionStore {
   updateRegion: (id: string, updatedRegion: Region) => void;
   deleteRegions: (ids: string[]) => void;
   setRegions: (regions: Region[]) => void;
+  getChannels: () => Channels;
+  getChannel: (channelId: string) => Region[] | undefined; // refactor to return Channel type
 }
 
 export const useRegionStore = create<RegionStore>((set, get) => ({
@@ -37,42 +91,23 @@ export const useRegionStore = create<RegionStore>((set, get) => ({
     set((state) => ({
       regions: state.regions.filter((region) => !ids.includes(region.id)),
     })),
-}));
-
-interface PlannerStore {
-  width: number;
-  height: number;
-  regionHeight: number;
-  regionPadding: number;
-  brushHeight: number;
-  brushColor: string;
-  axisHeight: number;
-  axisTickCount: number;
-  axisSubTickCount: number;
-  axisTickSize: number;
-  axisSubTickSize: number;
-  axisTickPadding: number;
-  timeFormat: (d: Date) => string;
-  setTimeFormat: (timeFormat: (d: Date) => string) => void;
-}
-
-export const usePlannerStore = create<PlannerStore>((set) => ({
-  width: 960,
-  height: 960,
-  setWidth: (width: number) => set({ width }),
-  setHeight: (height: number) => set({ height }),
-  axisHeight: 48,
-  axisTickCount: 8,
-  axisSubTickCount: 4,
-  axisTickSize: 8,
-  axisSubTickSize: 3,
-  axisTickPadding: 8,
-  regionHeight: 20,
-  regionPadding: 4,
-  brushHeight: 40,
-  brushColor: "#f0f0f0",
-  timeFormat: isoFormat,
-  setTimeFormat: (timeFormat: (d: Date) => string) => set({ timeFormat }),
+  getChannels: () => {
+    const regions = get().regions;
+    const channels = regions.reduce((acc, region) => {
+      acc[region.channelId] = acc[region.channelId] || [];
+      acc[region.channelId].push(region);
+      return acc;
+    }, {} as Channels);
+    return channels;
+  },
+  // refactor to return Channel type with regions
+  getChannel: (channelId: string) => {
+    const channels = get().getChannels();
+    if (!(channelId in channels)) {
+      throw new Error(`Channel ID "${channelId}" does not exist.`);
+    }
+    return channels[channelId];
+  },
 }));
 
 interface ScaleStore {

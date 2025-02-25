@@ -14,6 +14,8 @@ interface ReactPlannerProps {
   axisTickPadding?: number;
   brushHeight?: number;
   brushColor?: string;
+  // interaction design patterns
+  selectionOnDrag?: boolean;
 }
 
 export function ReactPlanner({
@@ -28,6 +30,7 @@ export function ReactPlanner({
   axisSubTickSize = 3,
   axisTickPadding = 8,
   brushHeight = 40,
+  selectionOnDrag = true,
   brushColor = "#f0f0f0",
   children,
 }: PropsWithChildren<ReactPlannerProps>) {
@@ -44,6 +47,7 @@ export function ReactPlanner({
     axisTickPadding,
     brushHeight,
     brushColor,
+    selectionOnDrag,
   });
 
   return (

@@ -1,8 +1,8 @@
 import "./App.css";
-import Plan from "./pages/Plan";
+import { TestPage } from "./pages/TestPage";
 
 function App() {
-  return <Plan />;
+  return <TestPage />;
 }
 
 export default App;

@@ -1,6 +1,6 @@
 // components
 import { ReactPlanner } from "../components/ReactPlanner";
-import { Channels } from "../components/Channels";
+import { Plan } from "../components/Plan";
 import { Background } from "../components/Background";
 import { Axis } from "../components/Axis";
 import { Brush } from "../components/Brush";
@@ -20,7 +20,7 @@ import { BackgroundVariant } from "../types";
 const utcPlanStart = new Date(Date.UTC(2025, 2, 2, 0, 0, 0));
 const utcPlanEnd = utcDay.offset(utcPlanStart, 1);
 
-export default function Plan() {
+export function TestPage() {
   const regions = useRegionStore((state) => state.regions);
   const addRegions = useRegionStore((state) => state.addRegions);
   const deleteRegions = useRegionStore((state) => state.deleteRegions);
@@ -97,10 +97,10 @@ export default function Plan() {
         }}
       >
         <ReactPlanner regionHeight={40} regionPadding={4} axisHeight={48}>
+          <Background variant={BackgroundVariant.SubTicks} color="#ccc" />
           <Brush />
           <Axis />
-          <Background variant={BackgroundVariant.SubTicks} color="#ccc" />
-          <Channels />
+          <Plan />
         </ReactPlanner>
         <Inspector />
       </div>
