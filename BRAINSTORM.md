@@ -165,6 +165,7 @@ Interace Elements
 - [ ] Markers (time markers)
 - [ ] Grid snapping (and/or markers)
 - [ ] Subtick labels
+- [ ] Solid/dashed lines for background component
 
 Channel controls
 
